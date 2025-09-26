@@ -28,7 +28,6 @@ public class Prestamos extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(153, 204, 255));
         setPreferredSize(new java.awt.Dimension(1024, 745));
 
         jLabel1.setText("Prestamos");
