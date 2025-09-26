@@ -36,17 +36,17 @@ public class Prestamos extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(462, 462, 462)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(816, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addContainerGap(501, Short.MAX_VALUE))
+                .addGap(147, 147, 147))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(351, 351, 351)
+                .addGap(45, 45, 45)
                 .addComponent(jLabel1)
-                .addContainerGap(378, Short.MAX_VALUE))
+                .addContainerGap(684, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

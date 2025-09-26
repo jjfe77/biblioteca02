@@ -28,7 +28,6 @@ public class Libros extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(204, 255, 204));
         setPreferredSize(new java.awt.Dimension(1024, 745));
 
         jLabel1.setText("Libros");
@@ -37,17 +36,17 @@ public class Libros extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(433, 433, 433)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(855, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addContainerGap(556, Short.MAX_VALUE))
+                .addGap(134, 134, 134))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(353, 353, 353)
+                .addGap(38, 38, 38)
                 .addComponent(jLabel1)
-                .addContainerGap(376, Short.MAX_VALUE))
+                .addContainerGap(691, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
