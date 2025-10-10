@@ -1,32 +1,16 @@
-package biblioteca02;
+package biblioteca02.JPanel;
 
 import biblioteca02.Dao.DaoException;
-import biblioteca02.DaoImpl.UsuariosDao;
-import biblioteca02.DaoImpl.UsuariosDaoImpl;
+import biblioteca02.DaoImpl.UsuarioDao;
+import biblioteca02.DaoImpl.UsuarioDaoImpl;
+import biblioteca02.Entidades.Usuario;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name="usuario")
+
 public class Usuarios extends javax.swing.JPanel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int numero_socio;
-    private String nombre;
-    private String apellido;
-    private String dni;
-    private String direccion;
-    private String telefono;
-    private String mail;
-
-    
-    
+     
     public Usuarios() {
         initComponents();
         
@@ -82,6 +66,11 @@ public class Usuarios extends javax.swing.JPanel {
         });
 
         jButtonEliminar.setText("Eliminar");
+        jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEliminarActionPerformed(evt);
+            }
+        });
 
         jButtonBuscar.setText("Buscar");
 
@@ -169,30 +158,30 @@ public class Usuarios extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarActionPerformed
-        UsuariosDao dao = new UsuariosDaoImpl();
+        UsuarioDao dao = new UsuarioDaoImpl();
         
-        Usuarios usuario = new Usuarios();
+        Usuario dataUsuario = new Usuario();
         
-        usuario.apellido=jTextFieldApellido.getText();
-        usuario.nombre=jTextFieldNombre.getText();
-        usuario.dni=jTextFieldDNI.getText();
-        usuario.direccion=jTextFieldDomicilio.getText();
-        usuario.telefono=jTextFieldTelefono.getText();
-        usuario.mail=jTextFieldMail.getText();
-        
+        dataUsuario.setNombre(jTextFieldNombre.getText());
+        dataUsuario.setApellido(jTextFieldApellido.getText());
+        dataUsuario.setDni(jTextFieldDNI.getText());
+        dataUsuario.setDireccion(jTextFieldDomicilio.getText());
+        dataUsuario.setTelefono(jTextFieldTelefono.getText());
+        dataUsuario.setMail(jTextFieldMail.getText());
+                
         try {
-            dao.save(usuario);
+            dao.save(dataUsuario);
         } catch (DaoException ex) {
-            Logger.getLogger(Usuarios.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //System.out.println(usuario);
+        System.out.println(dataUsuario);
         
     }//GEN-LAST:event_jButtonAgregarActionPerformed
 
-    @Override
-    public String toString() {
-        return "Usuarios{" + "nombre=" + nombre + ", apellido=" + apellido + ", dni=" + dni + ", direccion=" + direccion + ", telefono=" + telefono + ", mail=" + mail + '}';
-    }
+    private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
+        
+    }//GEN-LAST:event_jButtonEliminarActionPerformed
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -213,4 +202,5 @@ public class Usuarios extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldNombre;
     private javax.swing.JTextField jTextFieldTelefono;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -1,4 +1,4 @@
-package biblioteca02;
+package biblioteca02.JPanel;
 
 public class Biblioteca02 {
 

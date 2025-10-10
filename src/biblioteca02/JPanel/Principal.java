@@ -1,5 +1,5 @@
 
-package biblioteca02;
+package biblioteca02.JPanel;
 
 import java.awt.BorderLayout;
 
@@ -30,7 +30,6 @@ public class Principal extends javax.swing.JFrame {
         jMenuPrestamos = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1024, 768));
 
         javax.swing.GroupLayout jPanelContentLayout = new javax.swing.GroupLayout(jPanelContent);
         jPanelContent.setLayout(jPanelContentLayout);
