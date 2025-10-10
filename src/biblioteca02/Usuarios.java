@@ -1,20 +1,35 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package biblioteca02;
 
-/**
- *
- * @author Juanjo
- */
+import biblioteca02.Dao.DaoException;
+import biblioteca02.DaoImpl.UsuariosDao;
+import biblioteca02.DaoImpl.UsuariosDaoImpl;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="usuario")
 public class Usuarios extends javax.swing.JPanel {
 
-    /**
-     * Creates new form Usuarios
-     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int numero_socio;
+    private String nombre;
+    private String apellido;
+    private String dni;
+    private String direccion;
+    private String telefono;
+    private String mail;
+
+    
+    
     public Usuarios() {
         initComponents();
+        
     }
 
     /**
@@ -60,6 +75,11 @@ public class Usuarios extends javax.swing.JPanel {
         jLabel6.setText("Mail");
 
         jButtonAgregar.setText("Agregar");
+        jButtonAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAgregarActionPerformed(evt);
+            }
+        });
 
         jButtonEliminar.setText("Eliminar");
 
@@ -147,6 +167,32 @@ public class Usuarios extends javax.swing.JPanel {
                 .addContainerGap(315, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarActionPerformed
+        UsuariosDao dao = new UsuariosDaoImpl();
+        
+        Usuarios usuario = new Usuarios();
+        
+        usuario.apellido=jTextFieldApellido.getText();
+        usuario.nombre=jTextFieldNombre.getText();
+        usuario.dni=jTextFieldDNI.getText();
+        usuario.direccion=jTextFieldDomicilio.getText();
+        usuario.telefono=jTextFieldTelefono.getText();
+        usuario.mail=jTextFieldMail.getText();
+        
+        try {
+            dao.save(usuario);
+        } catch (DaoException ex) {
+            Logger.getLogger(Usuarios.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //System.out.println(usuario);
+        
+    }//GEN-LAST:event_jButtonAgregarActionPerformed
+
+    @Override
+    public String toString() {
+        return "Usuarios{" + "nombre=" + nombre + ", apellido=" + apellido + ", dni=" + dni + ", direccion=" + direccion + ", telefono=" + telefono + ", mail=" + mail + '}';
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
