@@ -91,7 +91,7 @@ CREATE TABLE `usuario` (
   `mail` varchar(40) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`numero_socio`),
   UNIQUE KEY `dni` (`dni`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +100,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'Ana','Pérez','30011222','Calle Falsa 123','1145678901',NULL),(2,'Luis','Gómez','31222333','Av. Siempreviva 742','1145123456',NULL),(3,'Sofía','Martínez','32233444','Belgrano 450','1167894561',NULL),(4,'Juan','Garcia','12456789','Arenales 100','223 123456',NULL),(5,'Mario','Perez','45123698','Luro 120','223 789632','mqt@as.com');
+INSERT INTO `usuario` VALUES (1,'Ana','Pérez','30011222','Calle Falsa 123','1145678901',NULL),(2,'Luis','Gómez','31222333','Av. Siempreviva 742','1145123456','kjlhg@lkjg.com'),(3,'Sofía','Martínez','32233444','Belgrano 450','1167894561',NULL),(4,'Juan','Garcia','12450000','Arenales 100','223 123456','gfdsa@kj.com'),(5,'Mario','Perez','45123698','Luro 120','223 789632','mqt@as.com'),(6,'Trota','Juancito','89123698','Rivadavia 1200','223 900000',''),(7,'Sosa','Maria Luisa','32659841','Paso 220','223 230548','123@123.com'),(8,'Una','Solida','65498787','Cerrito 125','223 659800','asd@asd.com'),(12,'Carlos','Lopez','12457896','Cerrito 1250','223 125963','pol@pol.com'),(15,'Luis','Maidana','98542136','Rivadavia 210','223 526341','qwerty@qwerty.com'),(17,'Luis','Rodriguez','98540136','Rivadavia 2100','223 526300','qwerty@qwerty2.com'),(18,'Martin2','Ferchu','12349877','Luro 10','223 452103','hola@hola2.com'),(23,'Juan','Pérez','12345678','Calle Falsa 123','223 123456','juan.perez@mail.com'),(24,'María','Gómez','87654321','Avenida Siempre Viva 742','223 654321','maria.gomez@mail.com'),(25,'Carlos','Rodríguez','11223344','Calle del Sol 50','223 112233','carlos.rodriguez@mail.com'),(26,'Lucía','Fernández','44332211','Boulevard Central 99','223 445566','lucia.fernandez@mail.com'),(27,'Diego','Sánchez','55667788','Calle Luna 10','223 778899','diego.sanchez@mail.com'),(28,'Valeria','Martínez','88776655','Avenida Estrella 7','223 667788','valeria.martinez@mail.com'),(29,'Matías','García','33445566','Calle Aurora 12','223 334455','matias.garcia@mail.com'),(30,'Sofía','López','66554433','Calle del Mar 25','223 556677','sofia.lopez@mail.com'),(31,'Federico','Hernández','99887766','Avenida Libertad 88','223 889900','federico.hernandez@mail.com'),(32,'Camila','Ruiz','77665544','Calle Jardín 5','223 223344','camila.ruiz@mail.com');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -113,4 +113,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-10 18:38:55
+-- Dump completed on 2025-10-12 16:01:58
