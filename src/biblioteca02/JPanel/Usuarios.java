@@ -15,6 +15,7 @@ public class Usuarios extends javax.swing.JPanel {
 
     public Usuarios() {
         initComponents();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -61,6 +62,24 @@ public class Usuarios extends javax.swing.JPanel {
 
         jLabel6.setText("Mail");
 
+        jTextFieldDNI.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldDNIKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldDNIKeyTyped(evt);
+            }
+        });
+
+        jTextFieldTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldTelefonoKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldTelefonoKeyTyped(evt);
+            }
+        });
+
         jButtonAgregar.setText("Agregar");
         jButtonAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -93,8 +112,6 @@ public class Usuarios extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jTableUsuarios);
 
         jButtonLimpiar.setText("Limpiar");
-        jButtonLimpiar.setMaximumSize(new java.awt.Dimension(72, 23));
-        jButtonLimpiar.setMinimumSize(new java.awt.Dimension(72, 23));
         jButtonLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonLimpiarActionPerformed(evt);
@@ -283,7 +300,7 @@ public class Usuarios extends javax.swing.JPanel {
 
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
         int fila = jTableUsuarios.getSelectedRow();
-        if (fila == -1 || jTextFieldApellido.getText().trim().isEmpty()){
+        if (fila == -1 || jTextFieldApellido.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Seleccione un usuario de la tabla");
             return;
         }
@@ -363,6 +380,79 @@ public class Usuarios extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonListarTodosActionPerformed
 
+    private void jTextFieldDNIKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDNIKeyTyped
+        char c = evt.getKeyChar();
+
+// Permitir teclas de control (borrar, enter, etc.)
+        if (Character.isISOControl(c)) {
+            return;
+        }
+
+// Bloquear si no es dígito
+        if (!Character.isDigit(c)) {
+            evt.consume();
+            return;
+        }
+
+// Bloquear si ya hay 8 caracteres
+        if (jTextFieldDNI.getText().length() >= 8) {
+            evt.consume();
+        }
+
+    }//GEN-LAST:event_jTextFieldDNIKeyTyped
+
+    private void jTextFieldDNIKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDNIKeyReleased
+        String texto = jTextFieldDNI.getText();
+
+// Eliminar caracteres no numéricos
+        texto = texto.replaceAll("[^\\d]", "");
+
+// Limitar a 8 caracteres
+        if (texto.length() > 8) {
+            texto = texto.substring(0, 8);
+        }
+
+// Actualizar el campo con el texto limpio
+        jTextFieldDNI.setText(texto);
+
+    }//GEN-LAST:event_jTextFieldDNIKeyReleased
+
+    private void jTextFieldTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldTelefonoKeyTyped
+        char c = evt.getKeyChar();
+
+// Permitir teclas de control (borrar, enter, etc.)
+        if (Character.isISOControl(c)) {
+            return;
+        }
+
+// Bloquear si no es dígito
+        if (!Character.isDigit(c)) {
+            evt.consume();
+            return;
+        }
+
+// Bloquear si ya hay 8 caracteres
+        if (jTextFieldDNI.getText().length() >= 8) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextFieldTelefonoKeyTyped
+
+    private void jTextFieldTelefonoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldTelefonoKeyReleased
+        String texto = jTextFieldTelefono.getText();
+
+// Eliminar caracteres no numéricos
+        texto = texto.replaceAll("[^\\d]", "");
+
+// Limitar a 8 caracteres
+        if (texto.length() > 10) {
+            texto = texto.substring(0, 10);
+        }
+
+// Actualizar el campo con el texto limpio
+        jTextFieldTelefono.setText(texto);
+
+    }//GEN-LAST:event_jTextFieldTelefonoKeyReleased
+
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {
         String apellido = jTextFieldApellido.getText().trim();
         if (apellido.isEmpty()) {
@@ -393,7 +483,7 @@ public class Usuarios extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "No se encontraron usuarios con ese apellido.", "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-/*
+    /*
     private void cargarTablaUsuarios() {
         UsuarioDaoImpl dao = new UsuarioDaoImpl();
         List<Usuario> lista = dao.listar(); // tu método listar() existente
