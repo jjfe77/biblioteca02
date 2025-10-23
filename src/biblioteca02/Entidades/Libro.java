@@ -1,5 +1,3 @@
-
-
 package biblioteca02.Entidades;
 
 import java.io.Serializable;
@@ -60,7 +58,7 @@ public class Libro implements Serializable {
     }
 
     public int getEjemplares() {
-        return ejemplares;
+        return 1;//ejemplares;
     }
 
     // Setters
@@ -88,8 +86,8 @@ public class Libro implements Serializable {
         this.anio = anio;
     }
 
- 
-
     @Override
     public String toString() {
-        return
+        return "";
+    }
+}

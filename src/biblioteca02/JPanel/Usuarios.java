@@ -1,4 +1,3 @@
-
 package biblioteca02.JPanel;
 
 import biblioteca02.Dao.DaoException;
@@ -12,7 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import org.eclipse.persistence.platform.database.HSQLPlatform;
-
 
 public class Usuarios extends javax.swing.JPanel {
 
@@ -123,6 +121,7 @@ public class Usuarios extends javax.swing.JPanel {
         });
 
         jButtonUpdate.setText("Actualizar");
+        jButtonUpdate.setEnabled(false);
         jButtonUpdate.setMaximumSize(new java.awt.Dimension(72, 23));
         jButtonUpdate.setMinimumSize(new java.awt.Dimension(72, 23));
         jButtonUpdate.setPreferredSize(new java.awt.Dimension(72, 23));
@@ -309,28 +308,28 @@ public class Usuarios extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonLimpiarActionPerformed
 
     private Integer validarMail() {
-    String email = jTextFieldMail.getText();
-    control = 0;
+        String email = jTextFieldMail.getText();
+        control = 0;
 
-    // Expresión regular básica para formato correo
-    String patronEmail = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+        // Expresión regular básica para formato correo
+        String patronEmail = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
 
-    if (!email.matches(patronEmail)) {
-        JOptionPane.showMessageDialog(this,
-                "Por favor, ingrese un correo electrónico válido (ejemplo@dominio.com)",
-                "Error de validación",
-                JOptionPane.ERROR_MESSAGE);
-        control = 1;
+        if (!email.matches(patronEmail)) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, ingrese un correo electrónico válido (ejemplo@dominio.com)",
+                    "Error de validación",
+                    JOptionPane.ERROR_MESSAGE);
+            control = 1;
 
-    }
-    /*else {
+        }
+        /*else {
             JOptionPane.showMessageDialog(this,
                     "Correo válido ✅",
                     "Validación correcta",
                     JOptionPane.INFORMATION_MESSAGE);
         }*/
-    return control;
-}
+        return control;
+    }
 
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
         int fila = jTableUsuarios.getSelectedRow();
@@ -367,6 +366,7 @@ public class Usuarios extends javax.swing.JPanel {
 
         usuario.setTelefono(jTextFieldTelefono.getText());
         jButtonBuscar.doClick();
+        jButtonUpdate.setEnabled(false);
 
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
@@ -394,6 +394,7 @@ public class Usuarios extends javax.swing.JPanel {
         jTextFieldDomicilio.setText(direccion);
         jTextFieldTelefono.setText(telefono);
         jTextFieldMail.setText(mail);
+        jButtonUpdate.setEnabled(true);
 
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
@@ -416,7 +417,7 @@ public class Usuarios extends javax.swing.JPanel {
             });
         }
     }//GEN-LAST:event_jButtonListarTodosActionPerformed
-
+    /*
     private void jTextFieldDNIKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDNIKeyTyped
         char c = evt.getKeyChar();
 
@@ -489,82 +490,132 @@ public class Usuarios extends javax.swing.JPanel {
         jTextFieldTelefono.setText(texto);
 
     }//GEN-LAST:event_jTextFieldTelefonoKeyReleased
+*/
+    //-------------------------------------------------------
+    private void validarEntradaNumerica(java.awt.event.KeyEvent evt, javax.swing.JTextField campo, int maxDigitos) {
+        char c = evt.getKeyChar();
 
+        // --- Etapa 1: validar lo que se está escribiendo (KeyTyped)
+        if (evt.getID() == java.awt.event.KeyEvent.KEY_TYPED) {
+            if (Character.isISOControl(c)) {
+                return;
+            }
+            if (!Character.isDigit(c)) {
+                evt.consume();
+                return;
+            }
+            if (campo.getText().length() >= maxDigitos) {
+                evt.consume();
+                return;
+            }
+        }
+
+        // --- Etapa 2: limpieza general (KeyReleased)
+        if (evt.getID() == java.awt.event.KeyEvent.KEY_RELEASED) {
+            String texto = campo.getText();
+            texto = texto.replaceAll("[^\\d]", ""); // eliminar no numéricos
+            if (texto.length() > maxDigitos) {
+                texto = texto.substring(0, maxDigitos); // limitar longitud
+            }
+            campo.setText(texto);
+        }
+    }
+
+    private void jTextFieldDNIKeyTyped(java.awt.event.KeyEvent evt) {
+        validarEntradaNumerica(evt, jTextFieldDNI, 8);
+    }
+
+    private void jTextFieldDNIKeyReleased(java.awt.event.KeyEvent evt) {
+        validarEntradaNumerica(evt, jTextFieldDNI, 8);
+    }
+
+    private void jTextFieldTelefonoKeyTyped(java.awt.event.KeyEvent evt) {
+        validarEntradaNumerica(evt, jTextFieldTelefono, 10);
+    }
+
+    private void jTextFieldTelefonoKeyReleased(java.awt.event.KeyEvent evt) {
+        validarEntradaNumerica(evt, jTextFieldTelefono, 10);
+    }
+
+    //------------------------------------------------------
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {
-    String apellido = jTextFieldApellido.getText().trim();
-    if (apellido.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Ingrese un apellido para buscar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-        return;
+        String apellido = jTextFieldApellido.getText().trim();
+        if (apellido.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un apellido para buscar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        UsuarioDaoImpl dao = new UsuarioDaoImpl();
+        List<Usuario> lista = dao.buscarPorApellido(apellido);
+
+        DefaultTableModel model = (DefaultTableModel) jTableUsuarios.getModel();
+        model.setRowCount(0);
+
+        if (lista != null && !lista.isEmpty()) {
+            for (Usuario u : lista) {
+                Object[] fila = new Object[]{
+                    u.getNumero_socio(),
+                    u.getApellido(),
+                    u.getNombre(),
+                    u.getDni(),
+                    u.getDireccion(),
+                    u.getTelefono(),
+                    u.getMail()
+                };
+                model.addRow(fila);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontraron usuarios con ese apellido.", "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
-    UsuarioDaoImpl dao = new UsuarioDaoImpl();
-    List<Usuario> lista = dao.buscarPorApellido(apellido);
+    private void placeHolder() {
+        // Placeholder para el campo Nombre
+        jTextFieldTelefono.setText("Ingrese 10 digitos");
+        jTextFieldTelefono.setForeground(Color.GRAY);
 
-    DefaultTableModel model = (DefaultTableModel) jTableUsuarios.getModel();
-    model.setRowCount(0);
-
-    if (lista != null && !lista.isEmpty()) {
-        for (Usuario u : lista) {
-            Object[] fila = new Object[]{
-                u.getNumero_socio(),
-                u.getApellido(),
-                u.getNombre(),
-                u.getDni(),
-                u.getDireccion(),
-                u.getTelefono(),
-                u.getMail()
-            };
-            model.addRow(fila);
-        }
-    } else {
-        JOptionPane.showMessageDialog(this, "No se encontraron usuarios con ese apellido.", "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
-    }
-}
-    private void placeHolder(){
-           // Placeholder para el campo Nombre
-    jTextFieldTelefono.setText("Ingrese 10 digitos");
-    jTextFieldTelefono.setForeground(Color.GRAY);
-
-    jTextFieldTelefono.addFocusListener(new java.awt.event.FocusAdapter() {
-        @Override
-        public void focusGained(java.awt.event.FocusEvent e) {
-            if (jTextFieldTelefono.getText().equals("Ingrese 10 digitos")) {
-                jTextFieldTelefono.setText("");
-                jTextFieldTelefono.setForeground(Color.BLACK);
+        jTextFieldTelefono.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (jTextFieldTelefono.getText().equals("Ingrese 10 digitos")) {
+                    jTextFieldTelefono.setText("");
+                    jTextFieldTelefono.setForeground(Color.BLACK);
+                }
             }
-        }
-        @Override
-        public void focusLost(java.awt.event.FocusEvent e) {
-            if (jTextFieldTelefono.getText().isEmpty()) {
-                jTextFieldTelefono.setForeground(Color.GRAY);
-                jTextFieldTelefono.setText("Ingrese 10 digitos");
-            }
-        }
-    });
 
-    // Placeholder para el campo DNI
-    jTextFieldDNI.setText("Ingrese 8 digitos");
-    jTextFieldDNI.setForeground(Color.GRAY);
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (jTextFieldTelefono.getText().isEmpty()) {
+                    jTextFieldTelefono.setForeground(Color.GRAY);
+                    jTextFieldTelefono.setText("Ingrese 10 digitos");
+                }
+            }
+        });
 
-    jTextFieldDNI.addFocusListener(new java.awt.event.FocusAdapter() {
-        @Override
-        public void focusGained(java.awt.event.FocusEvent e) {
-            if (jTextFieldDNI.getText().equals("Ingrese 8 digitos")) {
-                jTextFieldDNI.setText("");
-                jTextFieldDNI.setForeground(Color.BLACK);
+        // Placeholder para el campo DNI
+        jTextFieldDNI.setText("Ingrese 8 digitos");
+        jTextFieldDNI.setForeground(Color.GRAY);
+
+        jTextFieldDNI.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (jTextFieldDNI.getText().equals("Ingrese 8 digitos")) {
+                    jTextFieldDNI.setText("");
+                    jTextFieldDNI.setForeground(Color.BLACK);
+                }
             }
-        }
-        @Override
-        public void focusLost(java.awt.event.FocusEvent e) {
-            if (jTextFieldDNI.getText().isEmpty()) {
-                jTextFieldDNI.setForeground(Color.GRAY);
-                jTextFieldDNI.setText("Ingrese 8 digitos");
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (jTextFieldDNI.getText().isEmpty()) {
+                    jTextFieldDNI.setForeground(Color.GRAY);
+                    jTextFieldDNI.setText("Ingrese 8 digitos");
+                }
             }
-        }
-    });
+        });
 
     }
-    
+
     /*
     private void cargarTablaUsuarios() {
         UsuarioDaoImpl dao = new UsuarioDaoImpl();
@@ -585,7 +636,6 @@ public class Usuarios extends javax.swing.JPanel {
             });
         }
     }*/
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAgregar;

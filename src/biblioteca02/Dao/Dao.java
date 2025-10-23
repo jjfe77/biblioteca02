@@ -14,5 +14,5 @@ public interface Dao<T> {
     
     public abstract void eliminar(Integer id) throws DaoException;
     
-    public abstract List<T> buscarPorApellido(String a) throws DaoException;
+    //public abstract List<T> buscarPorApellido(String a) throws DaoException;
 }
