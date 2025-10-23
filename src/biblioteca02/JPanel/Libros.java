@@ -416,7 +416,6 @@ public class Libros extends javax.swing.JPanel {
 
                      
 
-    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
