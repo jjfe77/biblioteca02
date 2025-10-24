@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/Entidades/Usuario.java</file>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/JPanel/Usuarios.java</file>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/Entidades/Prestamo.java</file>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/DaoImpl/PrestamoDao.java</file>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/DaoImpl/UsuarioDao.java</file>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/DaoImpl/UsuarioDaoImpl.java</file>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/DaoImpl/PrestamoDaoImpl.java</file>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/DaoImpl/LibroDaoImpl.java</file>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/Entidades/Libro.java</file>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/DaoImpl/LibroDao.java</file>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/Dao/Dao.java</file>
+            <file>file:/C:/Users/Juanjo/Documents/NetBeansProjects/biblioteca02/src/biblioteca02/Dao/DaoException.java</file>
+        </group>
+    </open-files>
+</project-private>
