@@ -5,6 +5,7 @@ import biblioteca02.Dao.DaoException;
 import biblioteca02.Entidades.Usuario;
 import java.util.List;
 
+
 public interface UsuarioDao extends Dao<Usuario>{     
     
     public abstract List<Usuario> buscarPorApellido(String a) throws DaoException;
