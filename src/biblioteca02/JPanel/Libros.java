@@ -285,7 +285,7 @@ public class Libros extends javax.swing.JPanel {
     dataLibro.setAutor(txtAutor.getText());
     dataLibro.setGenero(txtGenero.getText());
     dataLibro.setAdicional(txtEditorial.getText()); 
-    dataLibro.setAnio(Integer.parseInt(txtAño.getText())); 
+    dataLibro.setAño(Integer.parseInt(txtAño.getText())); 
 
     try {
         dao.save(dataLibro);
@@ -298,7 +298,8 @@ public class Libros extends javax.swing.JPanel {
             "Error al guardar el libro: " + ex.getMessage(), "Error", 
             JOptionPane.ERROR_MESSAGE);
     }
-
+    
+   
     System.out.println(dataLibro);
 
     }//GEN-LAST:event_btn_AgregarActionPerformed
@@ -319,7 +320,7 @@ public class Libros extends javax.swing.JPanel {
     dataLibro.setAutor(txtAutor.getText());
     dataLibro.setGenero(txtGenero.getText());
     dataLibro.setAdicional(txtEditorial.getText());
-    dataLibro.setAnio(Integer.parseInt(txtAño.getText()));
+    dataLibro.setAño(Integer.parseInt(txtAño.getText()));
 
     try {
         LibroDaoImpl dao = new LibroDaoImpl() {};
@@ -372,7 +373,7 @@ public class Libros extends javax.swing.JPanel {
     dataLibro.setAutor(txtAutor.getText());
     dataLibro.setGenero(txtGenero.getText());
     dataLibro.setAdicional(txtEditorial.getText());
-    dataLibro.setAnio(Integer.parseInt(txtAño.getText()));
+    dataLibro.setAño(Integer.parseInt(txtAño.getText()));
 
     try {
         

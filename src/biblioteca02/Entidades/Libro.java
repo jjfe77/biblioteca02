@@ -21,7 +21,7 @@ public class Libro implements Serializable {
     private String autor;
     private String genero;
     private String editorial;
-    private int anio;
+    private int año;
 
     
     // Constructor vacío 
@@ -29,14 +29,14 @@ public class Libro implements Serializable {
     }
 
     // Constructor con parámetros 
-    public Libro(int id_libro, String isbn, String titulo, String autor, String genero, String editorial, int anio) {
+    public Libro(int id_libro, String isbn, String titulo, String autor, String genero, String editorial, int año) {
         this.id_libro = id_libro;
         this.isbn = isbn;
         this.titulo = titulo;
         this.autor = autor;
         this.genero = genero;
         this.editorial = editorial;
-        this.anio = anio;
+        this.año = año;
     }
 
     
@@ -57,15 +57,15 @@ public void setGenero(String genero) { this.genero = genero; }
 public String getEditorial() { return editorial; }
 public void setAdicional(String adicional) { this.editorial = adicional; }
 
-public int getAnio() { return anio; }
-public void setAnio(int anio) { this.anio = anio; }
+public int getAño() { return año; }
+public void setAño(int año) { this.año = año; }
 
 
 // Metodo toString 
     @Override
     public String toString() {
         return "Libro{" + "id_libro=" + id_libro +  ", isbn=" + isbn +  ", titulo=" + titulo +  
-        ", autor=" + autor +  ", genero=" + genero + ", editorial=" + editorial +  ", anio=" + anio +  '}';
+        ", autor=" + autor +  ", genero=" + genero + ", editorial=" + editorial +  ", año=" + año +  '}';
     }
     
  }
