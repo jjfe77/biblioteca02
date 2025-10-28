@@ -90,6 +90,7 @@ public class Usuarios extends javax.swing.JPanel {
         });
 
         jButtonEliminar.setText("Eliminar");
+        jButtonEliminar.setEnabled(false);
         jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEliminarActionPerformed(evt);
@@ -305,6 +306,11 @@ public class Usuarios extends javax.swing.JPanel {
         jTextFieldTelefono.setText("");
         jTextFieldMail.setText("");
         placeHolder();
+        jButtonAgregar.setEnabled(true);
+        jButtonBuscar.setEnabled(true);
+        jButtonEliminar.setEnabled(true);
+        jButtonEliminar.setEnabled(true);
+        jButtonUpdate.setEnabled(false);
     }//GEN-LAST:event_jButtonLimpiarActionPerformed
 
     private Integer validarMail() {
@@ -367,11 +373,16 @@ public class Usuarios extends javax.swing.JPanel {
         usuario.setTelefono(jTextFieldTelefono.getText());
         jButtonBuscar.doClick();
         jButtonUpdate.setEnabled(false);
+        jButtonAgregar.setEnabled(true);
+        jButtonBuscar.setEnabled(true);
+        jButtonEliminar.setEnabled(true);
 
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-
+        jButtonAgregar.setEnabled(false);
+        jButtonBuscar.setEnabled(false);
+        jButtonEliminar.setEnabled(false);
         int fila = jTableUsuarios.getSelectedRow(); // obtenemos la fila seleccionada
         if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione un usuario de la tabla primero");
@@ -399,6 +410,7 @@ public class Usuarios extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonListarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListarTodosActionPerformed
+        jButtonEliminar.setEnabled(true);
         UsuarioDaoImpl dao = new UsuarioDaoImpl();
         List<Usuario> lista = dao.listar(); // tu método listar() existente
 
@@ -417,80 +429,7 @@ public class Usuarios extends javax.swing.JPanel {
             });
         }
     }//GEN-LAST:event_jButtonListarTodosActionPerformed
-    /*
-    private void jTextFieldDNIKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDNIKeyTyped
-        char c = evt.getKeyChar();
-
-// Permitir teclas de control (borrar, enter, etc.)
-        if (Character.isISOControl(c)) {
-            return;
-        }
-
-// Bloquear si no es dígito
-        if (!Character.isDigit(c)) {
-            evt.consume();
-            return;
-        }
-
-// Bloquear si ya hay 8 caracteres
-        if (jTextFieldDNI.getText().length() >= 8) {
-            evt.consume();
-        }
-
-    }//GEN-LAST:event_jTextFieldDNIKeyTyped
-
-    private void jTextFieldDNIKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDNIKeyReleased
-        String texto = jTextFieldDNI.getText();
-
-// Eliminar caracteres no numéricos
-        texto = texto.replaceAll("[^\\d]", "");
-
-// Limitar a 8 caracteres
-        if (texto.length() > 8) {
-            texto = texto.substring(0, 8);
-        }
-
-// Actualizar el campo con el texto limpio
-        jTextFieldDNI.setText(texto);
-
-    }//GEN-LAST:event_jTextFieldDNIKeyReleased
-
-    private void jTextFieldTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldTelefonoKeyTyped
-        char c = evt.getKeyChar();
-
-// Permitir teclas de control (borrar, enter, etc.)
-        if (Character.isISOControl(c)) {
-            return;
-        }
-
-// Bloquear si no es dígito
-        if (!Character.isDigit(c)) {
-            evt.consume();
-            return;
-        }
-
-// Bloquear si ya hay 8 caracteres
-        if (jTextFieldTelefono.getText().length() >= 10) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_jTextFieldTelefonoKeyTyped
-
-    private void jTextFieldTelefonoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldTelefonoKeyReleased
-        String texto = jTextFieldTelefono.getText();
-
-// Eliminar caracteres no numéricos
-        texto = texto.replaceAll("[^\\d]", "");
-
-// Limitar a 8 caracteres
-        if (texto.length() > 10) {
-            texto = texto.substring(0, 10);
-        }
-
-// Actualizar el campo con el texto limpio
-        jTextFieldTelefono.setText(texto);
-
-    }//GEN-LAST:event_jTextFieldTelefonoKeyReleased
-*/
+    
     //-------------------------------------------------------
     private void validarEntradaNumerica(java.awt.event.KeyEvent evt, javax.swing.JTextField campo, int maxDigitos) {
         char c = evt.getKeyChar();
@@ -539,6 +478,8 @@ public class Usuarios extends javax.swing.JPanel {
 
     //------------------------------------------------------
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonEliminar.setEnabled(true);
+        jButtonAgregar.setEnabled(false);
         String apellido = jTextFieldApellido.getText().trim();
         if (apellido.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ingrese un apellido para buscar.", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -615,28 +556,6 @@ public class Usuarios extends javax.swing.JPanel {
         });
 
     }
-
-    /*
-    private void cargarTablaUsuarios() {
-        UsuarioDaoImpl dao = new UsuarioDaoImpl();
-        List<Usuario> lista = dao.listar(); // tu método listar() existente
-
-        DefaultTableModel modelo = (DefaultTableModel) jTableUsuarios.getModel();
-        modelo.setRowCount(0);
-
-        for (Usuario u : lista) {
-            modelo.addRow(new Object[]{
-                u.getNumero_socio(),
-                u.getNombre(),
-                u.getApellido(),
-                u.getDni(),
-                u.getDireccion(),
-                u.getTelefono(),
-                u.getMail()
-            });
-        }
-    }*/
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAgregar;
     private javax.swing.JButton jButtonBuscar;

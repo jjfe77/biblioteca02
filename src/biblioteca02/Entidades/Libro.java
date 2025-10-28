@@ -37,7 +37,7 @@ public class Libro implements Serializable {
         this.titulo = titulo;
         this.autor = autor;
         this.genero = genero;
-
+        this.editorial = editorial;
         this.anio = año;
     }
 
