@@ -1,13 +1,178 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package biblioteca02.DaoImpl;
 
-/**
- *
- * @author soled
- */
-public class PrestamoDaoImpl {
+import biblioteca02.Dao.DaoException;
+import biblioteca02.Entidades.Prestamo;
+import biblioteca02.Entidades.Usuario;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
+import javax.persistence.Persistence;
+
+public class PrestamoDaoImpl implements PrestamoDao {
     
+    private static final String PU = "biblioteca02PU";
+    
+    @Override
+    public void save(Prestamo data) throws DaoException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
+        EntityManager em = emf.createEntityManager();
+        
+        try {
+            Prestamo prestamoActivo = buscarPrestamoActivoPorUsuario(data.getUsuario());
+            
+            if (prestamoActivo != null) {
+                throw new DaoException("El usuario ya tiene un prestamo activo. Debe devolverlo primero.");
+            }
+            
+            em.getTransaction().begin();
+            em.persist(data);
+            em.getTransaction().commit();
+            
+        } catch (DaoException e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new DaoException("Error al guardar: " + e.getMessage());
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    @Override
+    public void update(Prestamo data) throws DaoException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
+        EntityManager em = emf.createEntityManager();
+        
+        try {
+            em.getTransaction().begin();
+            em.merge(data);
+            em.getTransaction().commit();
+            
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new DaoException("Error al actualizar: " + e.getMessage());
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    @Override
+    public Prestamo getById(int id) throws DaoException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
+        EntityManager em = emf.createEntityManager();
+        
+        try {
+            return em.find(Prestamo.class, id);
+        } catch (Exception e) {
+            throw new DaoException("Error al buscar: " + e.getMessage());
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    @Override
+    public List<Prestamo> listar() throws DaoException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
+        EntityManager em = emf.createEntityManager();
+        
+        try {
+            return em.createQuery("SELECT p FROM Prestamo p ORDER BY p.fecha_prestamo DESC", Prestamo.class)
+                     .getResultList();
+        } catch (Exception e) {
+            throw new DaoException("Error al listar: " + e.getMessage());
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    @Override
+    public Prestamo buscarPrestamoActivoPorUsuario(Usuario usuario) throws DaoException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
+        EntityManager em = emf.createEntityManager();
+        
+        try {
+            return em.createQuery("SELECT p FROM Prestamo p WHERE p.usuario = :usuario AND p.devuelto = false", Prestamo.class)
+                     .setParameter("usuario", usuario)
+                     .getSingleResult();
+                
+        } catch (NoResultException e) {
+            return null;
+        } catch (Exception e) {
+            throw new DaoException("Error al buscar prestamo activo: " + e.getMessage());
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    @Override
+    public List<Prestamo> listarPrestamosVencidos() throws DaoException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
+        EntityManager em = emf.createEntityManager();
+        
+        try {
+            Date hoy = new Date();
+            
+            return em.createQuery("SELECT p FROM Prestamo p WHERE p.devuelto = false AND p.fecha_devolucion < :hoy ORDER BY p.fecha_devolucion ASC", Prestamo.class)
+                     .setParameter("hoy", hoy)
+                     .getResultList();
+                
+        } catch (Exception e) {
+            throw new DaoException("Error al listar vencidos: " + e.getMessage());
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    @Override
+    public void marcarDevuelto(int id_prestamo) throws DaoException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
+        EntityManager em = emf.createEntityManager();
+        
+        try {
+            em.getTransaction().begin();
+            
+            Prestamo prestamo = em.find(Prestamo.class, id_prestamo);
+            
+            if (prestamo == null) {
+                throw new DaoException("No se encontro el prestamo con ID: " + id_prestamo);
+            }
+            
+            if (prestamo.isDevuelto()) {
+                throw new DaoException("Este prestamo ya fue devuelto.");
+            }
+            
+            prestamo.marcarDevuelto();
+            em.merge(prestamo);
+            em.getTransaction().commit();
+            
+        } catch (DaoException e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new DaoException("Error al marcar devuelto: " + e.getMessage());
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
 }

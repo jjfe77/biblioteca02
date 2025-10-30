@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package biblioteca02.Entidades;
 
 import java.io.Serializable;
@@ -10,109 +6,127 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
- * @author Juanjo
+ * @author soled
  */
 @Entity
-@Table (name="prestamo")
+@Table(name = "prestamo")
 public class Prestamo implements Serializable {
-
+    
     @Id
-    @GeneratedValue (strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_prestamo;
     
-    @ManyToOne 
-    @JoinColumn (name= "numero_socio")
-    private Usuario usuario; //la relacion con usuario ya que 1 usuario puede tener muchos prestamos
-    //pero 1 prestado solo va ser de un usuario
+    @OneToOne
+    private Usuario usuario;
     
-    private Date fecha_prestamo;
-    private Date fecha_devolucion;
-    private boolean devuelto; //boolean para indicar si devolvieron o no el libro
+    @OneToOne
     private Libro libro;
     
+    @Temporal(TemporalType.DATE)
+    private Date fecha_prestamo;
     
-    public Prestamo (){ 
+    @Temporal(TemporalType.DATE)
+    private Date fecha_devolucion;
+    
+    // true = devuelto, false = no devuelto
+    private boolean devuelto;
+    
+    public Prestamo() {
+        this.devuelto = false;
     }
     
-    public Prestamo(int id_prestamo, Usuario usuario, Libro libro, Date fecha_prestamo,Date fecha_devolucion,
-            boolean devuelto) {
-     this.id_prestamo = id_prestamo;
-     this.usuario= usuario;
-     this.fecha_prestamo= fecha_prestamo;
-     this.fecha_devolucion= fecha_devolucion;
-     this.devuelto = devuelto;
-    
- 
+    public Prestamo(Usuario usuario, Libro libro, Date fecha_prestamo, Date fecha_devolucion) {
+        this.usuario = usuario;
+        this.libro = libro;
+        this.fecha_prestamo = fecha_prestamo;
+        this.fecha_devolucion = fecha_devolucion;
+        this.devuelto = false;
     }
-    
     
     public int getId_prestamo() {
         return id_prestamo;
     }
-
+    
     public void setId_prestamo(int id_prestamo) {
         this.id_prestamo = id_prestamo;
     }
     
-    public  Usuario getUsuario () {
-    
+    public Usuario getUsuario() {
         return usuario;
     }
     
-    public void SetUsuario (Usuario usuario) {
-    
-        this.usuario= usuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
     
-     public Libro getLibro(Libro libro) {
-    
+    public Libro getLibro() {
         return libro;
     }
     
-    public void SetLibro (Libro libro) {
-    
-        this.libro= libro;
+    public void setLibro(Libro libro) {
+        this.libro = libro;
     }
     
-    
-     public  Date getFecha_prestamo () {
-    
+    public Date getFecha_prestamo() {
         return fecha_prestamo;
     }
     
-    public void SetFecha_prestamo (Date fecha_prestamo) {
-    
-        this.fecha_prestamo= fecha_prestamo;
+    public void setFecha_prestamo(Date fecha_prestamo) {
+        this.fecha_prestamo = fecha_prestamo;
     }
     
-        public  boolean isDevuelto () { //es un get pero se usa is x q es un boleano
+    public Date getFecha_devolucion() {
+        return fecha_devolucion;
+    }
     
+    public void setFecha_devolucion(Date fecha_devolucion) {
+        this.fecha_devolucion = fecha_devolucion;
+    }
+    
+    public boolean isDevuelto() {
         return devuelto;
     }
     
-    public void SetDevuelto (boolean devuelto) {
-    
-        this.devuelto= devuelto;
+    public void setDevuelto(boolean devuelto) {
+        this.devuelto = devuelto;
     }
     
-    
-    @Override 
-    public String toString (){
-    return "Prestamo{"+ "id_prestamo=" + id_prestamo + 
-            ", usuario=" +(usuario!=null? usuario.getNombre()+ "" + usuario.getApellido():"null")+
-            ", libro=" +(libro!=null? libro.getTitulo():"null")+
-            ", fecha_prestamo=" + fecha_prestamo +
-            ", fecha_devolucion=" + fecha_devolucion +
-            ", devuelto=" + devuelto +
-            '}';
+    public void marcarDevuelto() {
+        this.devuelto = true;
     }
     
+    public boolean estaVencido() {
+        if (devuelto) {
+            return false;
+        }
+        Date hoy = new Date();
+        return hoy.after(fecha_devolucion);
+    }
+    
+    public String getEstado() {
+        if (devuelto) {
+            return "Devuelto";
+        } else if (estaVencido()) {
+            return "Vencido";
+        } else {
+            return "Activo";
+        }
+    }
+    
+    @Override
+    public String toString() {
+        return "Prestamo{" + 
+               "id=" + id_prestamo + 
+               ", usuario=" + (usuario != null ? usuario.getNombre() : "null") +
+               ", libro=" + (libro != null ? libro.getTitulo() : "null") +
+               ", devuelto=" + devuelto +
+               '}';
+    }
 }
-
- 
