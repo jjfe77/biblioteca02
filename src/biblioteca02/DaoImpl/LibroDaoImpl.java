@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 
 
 
-public abstract class LibroDaoImpl implements LibroDao {
+public class LibroDaoImpl implements LibroDao {
 
 
     
@@ -151,6 +151,28 @@ public abstract class LibroDaoImpl implements LibroDao {
         emf.close();
     }
   }
+    
+    @Override
+    public List<Libro> buscarPorAutor(String autor) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
+        EntityManager em = emf.createEntityManager();
+        List<Libro> resultados = null;
+        try {
+            resultados = em.createQuery(
+                    "SELECT u FROM Libro u WHERE LOWER(u.autor) LIKE LOWER(:autor)",
+                    Libro.class
+            )
+                    .setParameter("autor", "%" + autor + "%")
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultados = java.util.Collections.emptyList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+        return resultados;
+    }
 
  }
     

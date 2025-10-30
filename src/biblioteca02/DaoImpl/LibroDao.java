@@ -2,6 +2,7 @@ package biblioteca02.DaoImpl;
 
 import biblioteca02.Dao.DaoException;
 import biblioteca02.Entidades.Libro;
+import java.util.List;
 
 public interface LibroDao {
 
@@ -16,6 +17,8 @@ public interface LibroDao {
 
     // Buscar un libro por su Titulo
     Libro findByTitulo(String titulo) throws DaoException;
+    
+    public abstract List<Libro> buscarPorAutor(String a) throws DaoException;
 
     
 }
