@@ -5,6 +5,7 @@ package biblioteca02.DaoImpl;
 import biblioteca02.Dao.DaoException;
 import biblioteca02.Entidades.Libro;
 import java.awt.HeadlessException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,7 +15,7 @@ import javax.swing.JOptionPane;
 
 
 
-public abstract class LibroDaoImpl implements LibroDao {
+public  class LibroDaoImpl implements LibroDao { //antes tu clase era abstracta y tambien me causaba conflictos
 
 
     
@@ -142,7 +143,7 @@ public abstract class LibroDaoImpl implements LibroDao {
             JOptionPane.showMessageDialog(null, "Se encontraron " + lista.size() + " libro(s).", "Resultados", JOptionPane.INFORMATION_MESSAGE);
         }
 
-        return (Libro) lista;
+        return lista.get(0); // cambio que hice, antes tenias esto y me causaba conflictos con prestamos return (Libro) lista;
 
     } catch (HeadlessException e) {
         throw new DaoException("Error al buscar libros: " + e.getMessage());
@@ -151,6 +152,23 @@ public abstract class LibroDaoImpl implements LibroDao {
         emf.close();
     }
   }
+    
+    //tamien te tuve que agregar este metodo
+ public List<Libro> listar() throws DaoException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
+        EntityManager em = emf.createEntityManager();
+
+        List<Libro> libros = new ArrayList<>();
+        try {
+            libros = em.createQuery("SELECT l FROM Libro l", Libro.class).getResultList();
+        } catch (Exception e) {
+            throw new DaoException("Error al listar libros: " + e.getMessage());
+        } finally {
+            em.close();
+            emf.close();
+        }
+        return libros;
+    }
 
  }
     
