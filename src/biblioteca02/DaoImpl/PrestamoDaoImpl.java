@@ -1,9 +1,10 @@
 package biblioteca02.DaoImpl;
 
 import biblioteca02.Dao.DaoException;
+import biblioteca02.Dao.PrestamoDao;
 import biblioteca02.Entidades.Prestamo;
 import biblioteca02.Entidades.Usuario;
-import java.util.Date;
+import java.time.LocalDate; 
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,12 +16,12 @@ public class PrestamoDaoImpl implements PrestamoDao {
     private static final String PU = "biblioteca02PU";
     
     @Override
-    public void save(Prestamo data) throws DaoException {
+    public void guardar(Prestamo data) throws DaoException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
         EntityManager em = emf.createEntityManager();
         
         try {
-            Prestamo prestamoActivo = buscarPrestamoActivoPorUsuario(data.getUsuario());
+            Prestamo prestamoActivo = buscarPrestamoActivoPorUsuario(data.obtenerUsuario());
             
             if (prestamoActivo != null) {
                 throw new DaoException("El usuario ya tiene un prestamo activo. Debe devolverlo primero.");
@@ -47,7 +48,7 @@ public class PrestamoDaoImpl implements PrestamoDao {
     }
 
     @Override
-    public void update(Prestamo data) throws DaoException {
+    public void actualizar(Prestamo data) throws DaoException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
         EntityManager em = emf.createEntityManager();
         
@@ -68,14 +69,14 @@ public class PrestamoDaoImpl implements PrestamoDao {
     }
 
     @Override
-    public Prestamo getById(int id) throws DaoException {
+    public Prestamo buscarPorId(int id) throws DaoException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
         EntityManager em = emf.createEntityManager();
         
         try {
             return em.find(Prestamo.class, id);
         } catch (Exception e) {
-            throw new DaoException("Error al buscar: " + e.getMessage());
+            throw new DaoException("Error al buscar por ID: " + e.getMessage());
         } finally {
             em.close();
             emf.close();
@@ -83,7 +84,7 @@ public class PrestamoDaoImpl implements PrestamoDao {
     }
 
     @Override
-    public List<Prestamo> listar() throws DaoException {
+    public List<Prestamo> listarTodos() throws DaoException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
         EntityManager em = emf.createEntityManager();
         
@@ -107,7 +108,7 @@ public class PrestamoDaoImpl implements PrestamoDao {
             return em.createQuery("SELECT p FROM Prestamo p WHERE p.usuario = :usuario AND p.devuelto = false", Prestamo.class)
                      .setParameter("usuario", usuario)
                      .getSingleResult();
-                
+            
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
@@ -124,12 +125,12 @@ public class PrestamoDaoImpl implements PrestamoDao {
         EntityManager em = emf.createEntityManager();
         
         try {
-            Date hoy = new Date();
+            LocalDate hoy = LocalDate.now(); 
             
             return em.createQuery("SELECT p FROM Prestamo p WHERE p.devuelto = false AND p.fecha_devolucion < :hoy ORDER BY p.fecha_devolucion ASC", Prestamo.class)
                      .setParameter("hoy", hoy)
                      .getResultList();
-                
+            
         } catch (Exception e) {
             throw new DaoException("Error al listar vencidos: " + e.getMessage());
         } finally {
@@ -139,7 +140,7 @@ public class PrestamoDaoImpl implements PrestamoDao {
     }
 
     @Override
-    public void marcarDevuelto(int id_prestamo) throws DaoException {
+    public void marcarComoDevuelto(int id_prestamo) throws DaoException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
         EntityManager em = emf.createEntityManager();
         
@@ -152,11 +153,11 @@ public class PrestamoDaoImpl implements PrestamoDao {
                 throw new DaoException("No se encontro el prestamo con ID: " + id_prestamo);
             }
             
-            if (prestamo.isDevuelto()) {
+            if (prestamo.estaDevuelto()) {
                 throw new DaoException("Este prestamo ya fue devuelto.");
             }
             
-            prestamo.marcarDevuelto();
+            prestamo.marcarDevuelto(); 
             em.merge(prestamo);
             em.getTransaction().commit();
             

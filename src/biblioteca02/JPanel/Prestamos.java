@@ -1,356 +1,5 @@
 
-   package biblioteca02.JPanel;
 
-import biblioteca02.Dao.DaoException;
-import biblioteca02.DaoImpl.PrestamoDaoImpl;
-import biblioteca02.DaoImpl.UsuarioDaoImpl; 
-import biblioteca02.DaoImpl.LibroDaoImpl;   
-import biblioteca02.Entidades.Prestamo;
-import biblioteca02.Entidades.Usuario;     
-import biblioteca02.Entidades.Libro;       
-
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-
-
-public class Prestamos extends javax.swing.JPanel {
-
-    private PrestamoDaoImpl prestamoDao;
-    private UsuarioDaoImpl usuarioDao; 
-    private LibroDaoImpl libroDao; 
-
-    private Usuario socioEncontrado = null;
-    private Libro libroEncontrado = null;
-
-   
-    public Prestamos() {
-        initComponents();
-        
-        try {
-            prestamoDao = new PrestamoDaoImpl();
-            usuarioDao = new UsuarioDaoImpl(); 
-            libroDao = new LibroDaoImpl();
-
-            cargarTabla(); 
-            registrarEventos(); 
-
-        } catch (Exception e) {
-            Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, "Error al inicializar DAOs", e);
-            JOptionPane.showMessageDialog(this, "Error de inicialización: " + e.getMessage(), "Error Grave", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-
-    private void registrarEventos() {
-        jButton1.addActionListener(this::accionBuscarSocio);      
-        jButton2.addActionListener(this::accionBuscarLibro);     
-        jButton3.addActionListener(this::accionAgregarPrestamo);  
-        jButton4.addActionListener(this::accionEditarPrestamo);   
-        jButton5.addActionListener(this::accionMarcarDevuelto);  
-        jButton6.addActionListener(this::accionActualizarTabla);  
-        
-        jTable1.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() != -1) {
-                cargarCamposDesdeTabla();
-            }
-        });
-    }
-
-   
-    private void cargarTabla() {
-        try {
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            model.setRowCount(0); 
-
-            List<Prestamo> prestamos = prestamoDao.listar();
-
-            for (Prestamo p : prestamos) {
-                
-                String nombreSocio = p.getUsuario() != null ? p.getUsuario().getNombre() : "N/A";
-                String apellidoSocio = p.getUsuario() != null ? p.getUsuario().getApellido() : "N/A";
-                String dniSocio = p.getUsuario() != null ? p.getUsuario().getDni() : "N/A";
-
-                String tituloLibro = p.getLibro() != null ? p.getLibro().getTitulo() : "N/A";
-                String isbnLibro = p.getLibro() != null ? p.getLibro().getIsbn() : "N/A";
-                String autorLibro = p.getLibro() != null ? p.getLibro().getAutor() : "N/A";
-
-                model.addRow(new Object[]{
-                    p.getId_prestamo(),
-                    nombreSocio,
-                    apellidoSocio,
-                    dniSocio,
-                    tituloLibro,
-                    isbnLibro,
-                    autorLibro,
-                    p.getFecha_prestamo(),
-                    p.getFecha_devolucion(),
-                    p.getEstado()
-                });
-            }
-        } catch (DaoException ex) {
-            Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al cargar la tabla de préstamos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-   
-    private void limpiarCampos() {
-        jTextField1.setText(""); 
-        jTextField2.setText(""); 
-        jTextField3.setText(""); 
-        jTextField4.setText(""); 
-        jTextField5.setText(""); 
-        jTextField6.setText(""); 
-        jTextField7.setText(""); 
-        jTextField8.setText(""); 
-        
-        jDateChooser1.setDate(null);
-        jDateChooser2.setDate(null);
-        
-        socioEncontrado = null;
-        libroEncontrado = null;
-        
-        jTextField4.requestFocus();
-    }
-    
-    
-    private void cargarCamposDesdeTabla() {
-        int fila = jTable1.getSelectedRow();
-        if (fila != -1) {
-            try {
-               
-                int idPrestamo = (Integer) jTable1.getValueAt(fila, 0);
-                Prestamo p = prestamoDao.getById(idPrestamo);
-                
-                if (p != null) {
-                    socioEncontrado = p.getUsuario();
-                    if (socioEncontrado != null) {
-                        jTextField4.setText(socioEncontrado.getApellido()); 
-                        jTextField1.setText(socioEncontrado.getNombre());
-                        jTextField2.setText(socioEncontrado.getApellido());
-                        jTextField3.setText(socioEncontrado.getDni());
-                    } else {
-                        limpiarCampos(); 
-                    }
-
-                    libroEncontrado = p.getLibro();
-                    if (libroEncontrado != null) {
-                        jTextField5.setText(libroEncontrado.getTitulo()); 
-                        jTextField6.setText(libroEncontrado.getTitulo());
-                        jTextField7.setText(libroEncontrado.getIsbn());
-                        jTextField8.setText(libroEncontrado.getAutor());
-                    } else {
-                        limpiarCampos(); 
-                    }
-
-                    jDateChooser1.setDate(p.getFecha_prestamo());
-                    jDateChooser2.setDate(p.getFecha_devolucion());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Préstamo no encontrado en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-                    limpiarCampos();
-                }
-
-            } catch (Exception ex) {
-                Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, "Error al cargar datos del préstamo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-    
-    
-    private void accionBuscarSocio(java.awt.event.ActionEvent evt) {
-        String apellido = jTextField4.getText().trim();
-        if (apellido.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese el apellido del socio para buscar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        jTextField1.setText(""); 
-        jTextField2.setText(""); 
-        jTextField3.setText(""); 
-        socioEncontrado = null; 
-
-        try {
-            socioEncontrado = usuarioDao.findByApellido(apellido); 
-            
-            if (socioEncontrado != null) {
-                jTextField1.setText(socioEncontrado.getNombre());
-                jTextField2.setText(socioEncontrado.getApellido());
-                jTextField3.setText(socioEncontrado.getDni());
-                JOptionPane.showMessageDialog(this, "Socio encontrado: " + socioEncontrado.getNombre() + " " + socioEncontrado.getApellido(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Socio no encontrado con el apellido: " + apellido, "Advertencia", JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (DaoException ex) {
-            Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al buscar socio: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-  
-    private void accionBuscarLibro(java.awt.event.ActionEvent evt) {
-        String titulo = jTextField5.getText().trim();
-        if (titulo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese el título del libro para buscar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        jTextField6.setText(""); 
-        jTextField7.setText(""); 
-        jTextField8.setText(""); 
-        libroEncontrado = null;
-        
-        try {
-            libroEncontrado = libroDao.findByTitulo(titulo); 
-            
-            if (libroEncontrado != null) {
-                jTextField6.setText(libroEncontrado.getTitulo());
-                jTextField7.setText(libroEncontrado.getIsbn());
-                jTextField8.setText(libroEncontrado.getAutor());
-                JOptionPane.showMessageDialog(this, "Libro encontrado: " + libroEncontrado.getTitulo(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Libro no encontrado con el título: " + titulo, "Advertencia", JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (DaoException ex) {
-            Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al buscar libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void accionAgregarPrestamo(java.awt.event.ActionEvent evt) {
-        if (socioEncontrado == null) {
-            JOptionPane.showMessageDialog(this, "Debe buscar y seleccionar un socio válido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (libroEncontrado == null) {
-            JOptionPane.showMessageDialog(this, "Debe buscar y seleccionar un libro válido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        Date fechaPrestamo = jDateChooser1.getDate();
-        Date fechaDevolucion = jDateChooser2.getDate();
-
-        if (fechaPrestamo == null || fechaDevolucion == null) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar la fecha de préstamo y de devolución.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        if (fechaDevolucion.before(fechaPrestamo)) {
-            JOptionPane.showMessageDialog(this, "La fecha de devolución no puede ser anterior a la de préstamo.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        Prestamo nuevoPrestamo = new Prestamo(socioEncontrado, libroEncontrado, fechaPrestamo, fechaDevolucion);
-
-        try {
-            prestamoDao.save(nuevoPrestamo);
-            JOptionPane.showMessageDialog(this, "Préstamo agregado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            limpiarCampos();
-            cargarTabla();
-        } catch (DaoException ex) {
-            Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al guardar el préstamo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void accionEditarPrestamo(java.awt.event.ActionEvent evt) {
-        int fila = jTable1.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un préstamo de la tabla para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        Object idObj = jTable1.getValueAt(fila, 0);
-        if (!(idObj instanceof Integer)) {
-             JOptionPane.showMessageDialog(this, "No se pudo obtener el ID del préstamo.", "Error", JOptionPane.ERROR_MESSAGE);
-             return;
-        }
-        int idPrestamo = (Integer) idObj;
-
-        Date nuevaFechaPrestamo = jDateChooser1.getDate();
-        Date nuevaFechaDevolucion = jDateChooser2.getDate();
-
-        if (nuevaFechaPrestamo == null || nuevaFechaDevolucion == null) {
-             JOptionPane.showMessageDialog(this, "Debe seleccionar las nuevas fechas de préstamo y devolución.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-             return;
-        }
-        
-        if (nuevaFechaDevolucion.before(nuevaFechaPrestamo)) {
-            JOptionPane.showMessageDialog(this, "La fecha de devolución no puede ser anterior a la de préstamo.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        try {
-            Prestamo prestamoAEditar = prestamoDao.getById(idPrestamo);
-
-            if (prestamoAEditar == null) {
-                throw new DaoException("El préstamo a editar no existe.");
-            }
-            
-            if (prestamoAEditar.isDevuelto()) {
-                JOptionPane.showMessageDialog(this, "El préstamo ya fue devuelto y no puede ser editado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            prestamoAEditar.setFecha_prestamo(nuevaFechaPrestamo);
-            prestamoAEditar.setFecha_devolucion(nuevaFechaDevolucion);
-
-            prestamoDao.update(prestamoAEditar);
-            JOptionPane.showMessageDialog(this, "Préstamo ID " + idPrestamo + " actualizado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            limpiarCampos();
-            cargarTabla();
-        } catch (DaoException ex) {
-            Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al editar el préstamo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void accionMarcarDevuelto(java.awt.event.ActionEvent evt) {
-        int fila = jTable1.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un préstamo de la tabla para marcar como devuelto.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        Object idObj = jTable1.getValueAt(fila, 0);
-        if (!(idObj instanceof Integer)) {
-             JOptionPane.showMessageDialog(this, "No se pudo obtener el ID del préstamo.", "Error", JOptionPane.ERROR_MESSAGE);
-             return;
-        }
-        int idPrestamo = (Integer) idObj;
-        String estadoActual = (String) jTable1.getValueAt(fila, 9); 
-
-
-        if ("Devuelto".equals(estadoActual)) {
-             JOptionPane.showMessageDialog(this, "Este préstamo ya ha sido devuelto.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-             return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Desea marcar como devuelto el préstamo ID: " + idPrestamo + "?",
-                "Confirmar Devolución", JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                prestamoDao.marcarDevuelto(idPrestamo);
-                JOptionPane.showMessageDialog(this, "Préstamo ID " + idPrestamo + " marcado como devuelto.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                limpiarCampos();
-                cargarTabla();
-            } catch (DaoException ex) {
-                Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, "Error al marcar devuelto: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-    private void accionActualizarTabla(java.awt.event.ActionEvent evt) {
-        limpiarCampos();
-        cargarTabla();
-        JOptionPane.showMessageDialog(this, "Tabla de préstamos actualizada.", "Información", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-   
 
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -386,6 +35,7 @@ public class Prestamos extends javax.swing.JPanel {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setOpaque(false);
@@ -458,6 +108,9 @@ public class Prestamos extends javax.swing.JPanel {
         jButton6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton6.setText("Actualizar");
 
+        jButton7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton7.setText("Listar Prestamos");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -522,19 +175,23 @@ public class Prestamos extends javax.swing.JPanel {
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(22, 22, 22))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(126, 126, 126)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(115, 115, 115)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1045, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(93, 93, 93)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(94, 94, 94)
+                        .addComponent(jButton7)
+                        .addGap(62, 62, 62)
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1045, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -589,17 +246,376 @@ public class Prestamos extends javax.swing.JPanel {
                     .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(15, 15, 15))
         );
     }// </editor-fold>//GEN-END:initComponents
+package biblioteca02.JPanel;
 
+import biblioteca02.Dao.DaoException;
+import biblioteca02.DaoImpl.PrestamoDaoImpl;
+import biblioteca02.DaoImpl.UsuarioDaoImpl; 
+import biblioteca02.DaoImpl.LibroDaoImpl;   
+import biblioteca02.Entidades.Prestamo;
+import biblioteca02.Entidades.Usuario;     
+import biblioteca02.Entidades.Libro;       
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+public class Prestamos extends javax.swing.JPanel {
+
+    private PrestamoDaoImpl prestamoDao;
+    private UsuarioDaoImpl usuarioDao; 
+    private LibroDaoImpl libroDao; 
+
+    private Usuario socioEncontrado = null;
+    private Libro libroEncontrado = null;
+
+    public Prestamos() {
+        initComponents();
+        
+        try {
+            prestamoDao = new PrestamoDaoImpl();
+            usuarioDao = new UsuarioDaoImpl(); 
+            libroDao = new LibroDaoImpl();
+
+            configurarCampos();
+            registrarEventos(); 
+            cargarTabla(); 
+
+        } catch (Exception e) {
+            Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, "Error al inicializar DAOs", e);
+            JOptionPane.showMessageDialog(this, "Error de inicializacion: " + e.getMessage(), "Error Grave", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void configurarCampos() {
+        jTextField1.setEditable(false);
+        jTextField2.setEditable(false);
+        jTextField3.setEditable(false);
+        jTextField6.setEditable(false);
+        jTextField7.setEditable(false);
+        jTextField8.setEditable(false);
+    }
+
+    private void registrarEventos() {
+        jButton1.addActionListener(this::accionBuscarSocio);      
+        jButton2.addActionListener(this::accionBuscarLibro);     
+        jButton3.addActionListener(this::accionAgregarPrestamo);  
+        jButton4.addActionListener(this::accionEditarPrestamo);   
+        jButton5.addActionListener(this::accionMarcarDevuelto);  
+        jButton6.addActionListener(this::accionActualizarTabla);  
+        jButton7.addActionListener(this::accionListarPrestamos);
+        
+        jTable1.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() != -1) {
+                cargarCamposDesdeTabla();
+            }
+        });
+    }
+
+    private void cargarTabla() {
+        try {
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0); 
+
+            List<Prestamo> prestamos = prestamoDao.listarTodos();
+
+            for (Prestamo p : prestamos) {
+                String nombreSocio = p.obtenerUsuario() != null ? p.obtenerUsuario().getNombre() : "N/A";
+                String apellidoSocio = p.obtenerUsuario() != null ? p.obtenerUsuario().getApellido() : "N/A";
+                String dniSocio = p.obtenerUsuario() != null ? p.obtenerUsuario().getDni() : "N/A";
+
+                String tituloLibro = p.obtenerLibro() != null ? p.obtenerLibro().getTitulo() : "N/A";
+                String isbnLibro = p.obtenerLibro() != null ? p.obtenerLibro().getIsbn() : "N/A";
+                String autorLibro = p.obtenerLibro() != null ? p.obtenerLibro().getAutor() : "N/A";
+
+                String estado = p.estaDevuelto() ? "Devuelto" : (p.estaVencido() ? "Vencido" : "Activo");
+
+                model.addRow(new Object[]{
+                    p.obtenerId(),
+                    nombreSocio,
+                    apellidoSocio,
+                    dniSocio,
+                    tituloLibro,
+                    isbnLibro,
+                    autorLibro,
+                    p.obtenerFechaPrestamo(),
+                    p.obtenerFechaDevolucion(),
+                    estado
+                });
+            }
+        } catch (DaoException ex) {
+            Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al cargar la tabla de prestamos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void limpiarCampos() {
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jTextField6.setText("");
+        jTextField7.setText("");
+        jTextField8.setText("");
+        
+        jDateChooser1.setDate(null);
+        jDateChooser2.setDate(null);
+        
+        socioEncontrado = null;
+        libroEncontrado = null;
+        
+        jTextField4.requestFocus();
+    }
+    
+    private void cargarCamposDesdeTabla() {
+        int fila = jTable1.getSelectedRow();
+        if (fila != -1) {
+            try {
+                int idPrestamo = (Integer) jTable1.getValueAt(fila, 0);
+                Prestamo p = prestamoDao.buscarPorId(idPrestamo);
+                
+                if (p != null) {
+                    socioEncontrado = p.obtenerUsuario();
+                    if (socioEncontrado != null) {
+                        jTextField4.setText(socioEncontrado.getApellido());
+                        jTextField1.setText(socioEncontrado.getNombre());
+                        jTextField2.setText(socioEncontrado.getApellido());
+                        jTextField3.setText(socioEncontrado.getDni());
+                    }
+
+                    libroEncontrado = p.obtenerLibro();
+                    if (libroEncontrado != null) {
+                        jTextField5.setText(libroEncontrado.getTitulo());
+                        jTextField6.setText(libroEncontrado.getTitulo());
+                        jTextField7.setText(libroEncontrado.getIsbn());
+                        jTextField8.setText(libroEncontrado.getAutor());
+                    }
+
+                    if (p.obtenerFechaPrestamo() != null) {
+                        jDateChooser1.setDate(Date.from(p.obtenerFechaPrestamo().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                    }
+                    if (p.obtenerFechaDevolucion() != null) {
+                        jDateChooser2.setDate(Date.from(p.obtenerFechaDevolucion().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Prestamo no encontrado en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Error al cargar datos del prestamo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    private void accionBuscarSocio(java.awt.event.ActionEvent evt) {
+        String apellido = jTextField4.getText().trim();
+        if (apellido.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese el apellido del socio para buscar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        socioEncontrado = null;
+
+        try {
+            socioEncontrado = usuarioDao.findByApellido(apellido);
+            
+            if (socioEncontrado != null) {
+                jTextField1.setText(socioEncontrado.getNombre());
+                jTextField2.setText(socioEncontrado.getApellido());
+                jTextField3.setText(socioEncontrado.getDni());
+                JOptionPane.showMessageDialog(this, "Socio encontrado: " + socioEncontrado.getNombre() + " " + socioEncontrado.getApellido(), "Exito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Socio no encontrado con el apellido: " + apellido, "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (DaoException ex) {
+            Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al buscar socio: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+  
+    private void accionBuscarLibro(java.awt.event.ActionEvent evt) {
+        String titulo = jTextField5.getText().trim();
+        if (titulo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese el titulo del libro para buscar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        jTextField6.setText("");
+        jTextField7.setText("");
+        jTextField8.setText("");
+        libroEncontrado = null;
+        
+libroEncontrado = libroDao.findByTitulo(titulo);
+if (libroEncontrado != null) {
+jTextField6.setText(libroEncontrado.getTitulo());
+jTextField7.setText(libroEncontrado.getIsbn());
+jTextField8.setText(libroEncontrado.getAutor());
+JOptionPane.showMessageDialog(this, "Libro encontrado: " + libroEncontrado.getTitulo(), "Exito", JOptionPane.INFORMATION_MESSAGE);
+} else {
+JOptionPane.showMessageDialog(this, "Libro no encontrado con el titulo: " + titulo, "Advertencia", JOptionPane.WARNING_MESSAGE);
+}
+    }
+
+    private void accionAgregarPrestamo(java.awt.event.ActionEvent evt) {
+        if (socioEncontrado == null) {
+            JOptionPane.showMessageDialog(this, "Debe buscar y seleccionar un socio valido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (libroEncontrado == null) {
+            JOptionPane.showMessageDialog(this, "Debe buscar y seleccionar un libro valido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        Date fechaPrestamo = jDateChooser1.getDate();
+        Date fechaDevolucion = jDateChooser2.getDate();
+
+        if (fechaPrestamo == null || fechaDevolucion == null) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar la fecha de prestamo y de devolucion.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if (fechaDevolucion.before(fechaPrestamo)) {
+            JOptionPane.showMessageDialog(this, "La fecha de devolucion no puede ser anterior a la de prestamo.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        LocalDate localFechaPrestamo = fechaPrestamo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate localFechaDevolucion = fechaDevolucion.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        Prestamo nuevoPrestamo = new Prestamo(socioEncontrado, libroEncontrado, localFechaPrestamo, localFechaDevolucion);
+
+        try {
+            prestamoDao.guardar(nuevoPrestamo);
+            JOptionPane.showMessageDialog(this, "Prestamo agregado correctamente.", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            limpiarCampos();
+            cargarTabla();
+        } catch (DaoException ex) {
+            Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al guardar el prestamo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void accionEditarPrestamo(java.awt.event.ActionEvent evt) {
+        int fila = jTable1.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un prestamo de la tabla para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int idPrestamo = (Integer) jTable1.getValueAt(fila, 0);
+
+        Date nuevaFechaPrestamo = jDateChooser1.getDate();
+        Date nuevaFechaDevolucion = jDateChooser2.getDate();
+
+        if (nuevaFechaPrestamo == null || nuevaFechaDevolucion == null) {
+             JOptionPane.showMessageDialog(this, "Debe seleccionar las nuevas fechas de prestamo y devolucion.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+             return;
+        }
+        
+        if (nuevaFechaDevolucion.before(nuevaFechaPrestamo)) {
+            JOptionPane.showMessageDialog(this, "La fecha de devolucion no puede ser anterior a la de prestamo.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            Prestamo prestamoAEditar = prestamoDao.buscarPorId(idPrestamo);
+
+            if (prestamoAEditar == null) {
+                throw new DaoException("El prestamo a editar no existe.");
+            }
+            
+            if (prestamoAEditar.estaDevuelto()) {
+                JOptionPane.showMessageDialog(this, "El prestamo ya fue devuelto y no puede ser editado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            LocalDate localFechaPrestamo = nuevaFechaPrestamo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate localFechaDevolucion = nuevaFechaDevolucion.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            prestamoAEditar.establecerFechaPrestamo(localFechaPrestamo);
+            prestamoAEditar.establecerFechaDevolucion(localFechaDevolucion);
+
+            prestamoDao.actualizar(prestamoAEditar);
+            JOptionPane.showMessageDialog(this, "Prestamo ID " + idPrestamo + " actualizado correctamente.", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            limpiarCampos();
+            cargarTabla();
+        } catch (DaoException ex) {
+            Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al editar el prestamo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void accionMarcarDevuelto(java.awt.event.ActionEvent evt) {
+        int fila = jTable1.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un prestamo de la tabla para marcar como devuelto.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int idPrestamo = (Integer) jTable1.getValueAt(fila, 0);
+        String estadoActual = (String) jTable1.getValueAt(fila, 9);
+
+        if ("Devuelto".equals(estadoActual)) {
+             JOptionPane.showMessageDialog(this, "Este prestamo ya ha sido devuelto.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+             return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Desea marcar como devuelto el prestamo ID: " + idPrestamo + "?",
+                "Confirmar Devolucion", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                prestamoDao.marcarComoDevuelto(idPrestamo);
+                JOptionPane.showMessageDialog(this, "Prestamo ID " + idPrestamo + " marcado como devuelto.", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                limpiarCampos();
+                cargarTabla();
+            } catch (DaoException ex) {
+                Logger.getLogger(Prestamos.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Error al marcar devuelto: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void accionActualizarTabla(java.awt.event.ActionEvent evt) {
+        limpiarCampos();
+        cargarTabla();
+        JOptionPane.showMessageDialog(this, "Tabla de prestamos actualizada.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void accionListarPrestamos(java.awt.event.ActionEvent evt) {
+        cargarTabla();
+        JOptionPane.showMessageDialog(this, "Mostrando todos los prestamos de la base de datos.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+    }
+}
+
+        
+        
+    
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -607,6 +623,7 @@ public class Prestamos extends javax.swing.JPanel {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
