@@ -153,13 +153,14 @@ public class LibroDaoImpl implements LibroDao {
   }
     
     @Override
-    public List<Libro> buscarPorAutor(String autor) {
+    public List<Libro> buscarPorAutor(String autor, String titulo) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
         EntityManager em = emf.createEntityManager();
         List<Libro> resultados = null;
         try {
             resultados = em.createQuery(
-                    "SELECT u FROM Libro u WHERE LOWER(u.autor) LIKE LOWER(:autor)",
+                    //"SELECT u FROM Libro u WHERE LOWER(u.autor) LIKE LOWER(:autor)",
+                    "SELECT u FROM libros  u WHERE LOWER (u.autor) LIKE LOWER(:autor)  AND LOWER (u.titulo) LIKE LOWER(:titulo)",
                     Libro.class
             )
                     .setParameter("autor", "%" + autor + "%")
