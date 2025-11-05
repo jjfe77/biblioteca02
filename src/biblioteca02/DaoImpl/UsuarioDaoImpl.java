@@ -55,6 +55,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+
     @Override
     public List<Usuario> buscarPorApellido(String apellido) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");

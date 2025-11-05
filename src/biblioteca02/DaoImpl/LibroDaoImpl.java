@@ -15,7 +15,11 @@ import javax.swing.JOptionPane;
 
 
 
+<<<<<<< HEAD
 public  class LibroDaoImpl implements LibroDao { //antes tu clase era abstracta y tambien me causaba conflictos
+=======
+public class LibroDaoImpl implements LibroDao {
+>>>>>>> candela-1
 
 
     
@@ -153,6 +157,7 @@ public  class LibroDaoImpl implements LibroDao { //antes tu clase era abstracta 
     }
   }
     
+<<<<<<< HEAD
     //tamien te tuve que agregar este metodo
  public List<Libro> listar() throws DaoException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
@@ -163,11 +168,32 @@ public  class LibroDaoImpl implements LibroDao { //antes tu clase era abstracta 
             libros = em.createQuery("SELECT l FROM Libro l", Libro.class).getResultList();
         } catch (Exception e) {
             throw new DaoException("Error al listar libros: " + e.getMessage());
+=======
+    @Override
+    public List<Libro> buscarPorAutor(String autor) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
+        EntityManager em = emf.createEntityManager();
+        List<Libro> resultados = null;
+        try {
+            resultados = em.createQuery(
+                    "SELECT u FROM Libro u WHERE LOWER(u.autor) LIKE LOWER(:autor)",
+                    Libro.class
+            )
+                    .setParameter("autor", "%" + autor + "%")
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultados = java.util.Collections.emptyList();
+>>>>>>> candela-1
         } finally {
             em.close();
             emf.close();
         }
+<<<<<<< HEAD
         return libros;
+=======
+        return resultados;
+>>>>>>> candela-1
     }
 
  }

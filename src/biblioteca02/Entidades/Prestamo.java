@@ -9,6 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+<<<<<<< HEAD
+=======
+/**
+ *
+ * @author Juanjo
+ * @author Candela
+ * @author Brenda
+ */
+>>>>>>> candela-1
 @Entity
 @Table(name = "prestamo")
 public class Prestamo implements Serializable {

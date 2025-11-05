@@ -3,6 +3,8 @@
   <persistence-unit name="biblioteca02PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>biblioteca02.Entidades.Usuario</class>
+    <class>biblioteca02.Entidades.Libro</class>
+    <class>biblioteca02.Entidades.Prestamo</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/biblioteca_simple?serverTimezone=UTC"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
