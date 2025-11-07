@@ -160,7 +160,7 @@ public class LibroDaoImpl implements LibroDao {
         try {
             resultados = em.createQuery(
                     //"SELECT u FROM Libro u WHERE LOWER(u.autor) LIKE LOWER(:autor)",
-                    "SELECT u FROM libros  u WHERE LOWER (u.autor) LIKE LOWER(:autor)  AND LOWER (u.titulo) LIKE LOWER(:titulo)",
+                    "SELECT u FROM libro u WHERE LOWER (u.autor) LIKE LOWER(:autor)  AND LOWER (u.titulo) LIKE LOWER(:titulo)",
                     Libro.class
             )
                     .setParameter("autor", "%" + autor + "%")
