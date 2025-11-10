@@ -1,24 +1,29 @@
-package biblioteca02.Dao;
+package biblioteca02.DaoImpl;
 
+import biblioteca02.Dao.DaoException;
 import biblioteca02.Entidades.Prestamo;
 import biblioteca02.Entidades.Usuario;
 import java.util.List;
 
+
 public interface PrestamoDao {
     
-    void guardar(Prestamo data) throws DaoException;
+
+    void guardar(Prestamo prestamo) throws DaoException;
+  
+    void actualizar(Prestamo prestamo) throws DaoException;
     
-    void actualizar(Prestamo data) throws DaoException;
+
+    void eliminar(int idPrestamo) throws DaoException;
     
-    Prestamo buscarPorId(int id) throws DaoException;
+  
+    void marcarDevuelto(int idPrestamo) throws DaoException;
     
+   
     List<Prestamo> listarTodos() throws DaoException;
+   
+  
+    List<Prestamo> buscarPorApellido(Usuario usuario) throws DaoException;
     
-    Prestamo buscarPrestamoActivo(Usuario usuario) throws DaoException;
     
-    List<Prestamo> listarVencidos() throws DaoException;
-    
-    void marcarDevuelto(int id_prestamo) throws DaoException;
-    
-    List<Prestamo> buscarPorDni(String dni) throws DaoException;
 }

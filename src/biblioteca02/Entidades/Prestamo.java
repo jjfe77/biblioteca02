@@ -1,38 +1,35 @@
 package biblioteca02.Entidades;
-
 import java.io.Serializable;
 import java.time.LocalDate;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-<<<<<<< HEAD
-=======
-/**
- *
- * @author Juanjo
- * @author Candela
- * @author Brenda
- */
->>>>>>> candela-1
 @Entity
 @Table(name = "prestamo")
 public class Prestamo implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_prestamo;
+    private int id;
     
     @OneToOne
+    @JoinColumn(name = "numero_socio")
     private Usuario usuario;
     
     @OneToOne
+    @JoinColumn(name = "id_libro")
     private Libro libro;
     
+    @Column(name = "fecha_prestamo")
     private LocalDate fecha_prestamo; 
+    
+    @Column(name = "fecha_devolucion")
     private LocalDate fecha_devolucion; 
     
     private boolean devuelto;
@@ -48,44 +45,43 @@ public class Prestamo implements Serializable {
         this.fecha_devolucion = fecha_devolucion;
         this.devuelto = false;
     }
-    
-    public int obtenerId() {
-        return id_prestamo;
+   
+    public int getId() {
+    return id;
     }
-    
-    public void establecerId(int id_prestamo) {
-        this.id_prestamo = id_prestamo;
-    }
-    
-    public Usuario obtenerUsuario() {
+
+    public void setId(int id_prestamo) {
+    this.id = id_prestamo;
+    } 
+    public Usuario getUsuario() {
         return usuario;
     }
     
-    public void establecerUsuario(Usuario usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
     
-    public Libro obtenerLibro() {
+    public Libro getLibro() {
         return libro;
     }
     
-    public void establecerLibro(Libro libro) {
+    public void setLibro(Libro libro) {
         this.libro = libro;
     }
     
-    public LocalDate obtenerFechaPrestamo() { 
+    public LocalDate getFechaPrestamo() { 
         return fecha_prestamo;
     }
     
-    public void establecerFechaPrestamo(LocalDate fecha_prestamo) { 
+    public void setFechaPrestamo(LocalDate fecha_prestamo) { 
         this.fecha_prestamo = fecha_prestamo;
     }
     
-    public LocalDate obtenerFechaDevolucion() {
+    public LocalDate getFechaDevolucion() {
         return fecha_devolucion;
     }
     
-    public void establecerFechaDevolucion(LocalDate fecha_devolucion) { 
+    public void setFechaDevolucion(LocalDate fecha_devolucion) { 
         this.fecha_devolucion = fecha_devolucion;
     }
    

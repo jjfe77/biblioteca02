@@ -15,11 +15,8 @@ import javax.swing.JOptionPane;
 
 
 
-<<<<<<< HEAD
-public  class LibroDaoImpl implements LibroDao { //antes tu clase era abstracta y tambien me causaba conflictos
-=======
-public class LibroDaoImpl implements LibroDao {
->>>>>>> candela-1
+public  class LibroDaoImpl implements LibroDao { 
+
 
 
     
@@ -131,44 +128,47 @@ public class LibroDaoImpl implements LibroDao {
  }
     
     
-    @Override
-    public Libro findByTitulo(String titulo) throws DaoException {
-        
+ @Override
+public List<Libro> findByTitulo(String titulo) throws DaoException {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
     EntityManager em = emf.createEntityManager();
+    List<Libro> lista = new ArrayList<>();
 
     try {
-        List<Libro> lista = em.createQuery(
-            "SELECT l FROM Libro l WHERE l.titulo LIKE :titulo", Libro.class).setParameter("titulo", "%" + titulo + "%").getResultList();
+        lista = em.createQuery(
+                "SELECT l FROM Libro l WHERE LOWER(l.titulo) LIKE LOWER(:titulo)",
+                Libro.class
+        )
+        .setParameter("titulo", "%" + titulo + "%")
+        .getResultList();
 
-        if (lista.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No se encontraron libros con ese título.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        /*if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                null,
+                "No se encontraron libros con ese título.",
+                "Sin resultados",
+                JOptionPane.WARNING_MESSAGE
+            );
         } else {
-            JOptionPane.showMessageDialog(null, "Se encontraron " + lista.size() + " libro(s).", "Resultados", JOptionPane.INFORMATION_MESSAGE);
-        }
+            JOptionPane.showMessageDialog(
+                null,
+                "Se encontraron " + lista.size() + " libro(s).",
+                "Resultados",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        }*/ //no te lo saco por las dudas es para probar algo
 
-        return lista.get(0); // cambio que hice, antes tenias esto y me causaba conflictos con prestamos return (Libro) lista;
-
-    } catch (HeadlessException e) {
+    } catch (Exception e) {
         throw new DaoException("Error al buscar libros: " + e.getMessage());
     } finally {
         em.close();
         emf.close();
     }
-  }
-    
-<<<<<<< HEAD
-    //tamien te tuve que agregar este metodo
- public List<Libro> listar() throws DaoException {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
-        EntityManager em = emf.createEntityManager();
 
-        List<Libro> libros = new ArrayList<>();
-        try {
-            libros = em.createQuery("SELECT l FROM Libro l", Libro.class).getResultList();
-        } catch (Exception e) {
-            throw new DaoException("Error al listar libros: " + e.getMessage());
-=======
+    return lista;
+}
+
+
     @Override
     public List<Libro> buscarPorAutor(String autor) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
@@ -184,16 +184,16 @@ public class LibroDaoImpl implements LibroDao {
         } catch (Exception e) {
             e.printStackTrace();
             resultados = java.util.Collections.emptyList();
->>>>>>> candela-1
+
         } finally {
             em.close();
             emf.close();
         }
-<<<<<<< HEAD
-        return libros;
-=======
+
+     
+
         return resultados;
->>>>>>> candela-1
+
     }
 
  }

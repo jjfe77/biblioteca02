@@ -98,6 +98,7 @@ public class Usuarios extends javax.swing.JPanel {
         });
 
         jButtonBuscar.setText("Buscar");
+        jButtonBuscar.setToolTipText("Complete el campo apellido o parte de el para buscar");
         jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBuscarActionPerformed(evt);
@@ -109,7 +110,7 @@ public class Usuarios extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Socio Nº", "Apellido", "Nombre", "DNI", "Direccion", "Telefono", "Mail"
+                "Socio Nº", "Nombre", "Apellido", "DNI", "Direccion", "Telefono", "Mail"
             }
         ));
         jScrollPane1.setViewportView(jTableUsuarios);
@@ -121,11 +122,8 @@ public class Usuarios extends javax.swing.JPanel {
             }
         });
 
-        jButtonUpdate.setText("Actualizar");
+        jButtonUpdate.setText("Guardar");
         jButtonUpdate.setEnabled(false);
-        jButtonUpdate.setMaximumSize(new java.awt.Dimension(72, 23));
-        jButtonUpdate.setMinimumSize(new java.awt.Dimension(72, 23));
-        jButtonUpdate.setPreferredSize(new java.awt.Dimension(72, 23));
         jButtonUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonUpdateActionPerformed(evt);
@@ -163,7 +161,7 @@ public class Usuarios extends javax.swing.JPanel {
                         .addComponent(jButtonLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49)
                         .addComponent(jButtonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                         .addComponent(jButtonUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(68, 68, 68)
@@ -231,7 +229,7 @@ public class Usuarios extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
                             .addComponent(jTextFieldMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(98, 98, 98))
+                        .addGap(57, 57, 57))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButtonListarTodos, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(105, 105, 105)))
@@ -242,9 +240,9 @@ public class Usuarios extends javax.swing.JPanel {
                     .addComponent(jButtonLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(71, 71, 71)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(81, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -272,7 +270,8 @@ public class Usuarios extends javax.swing.JPanel {
         System.out.println(dataUsuario);
 
     }//GEN-LAST:event_jButtonAgregarActionPerformed
-
+    
+    
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
         int fila = jTableUsuarios.getSelectedRow();
         if (fila == -1) {
@@ -290,6 +289,15 @@ public class Usuarios extends javax.swing.JPanel {
 
         if (confirm == JOptionPane.YES_OPTION) {
             UsuarioDaoImpl dao = new UsuarioDaoImpl();
+            //----------------------------------------
+            /*
+            Pobar Javadoc
+            dao.buscarPorApellido
+            */
+            //-----------------------------------------
+            
+            
+            
             dao.eliminar(idUsuario);
             JOptionPane.showMessageDialog(this, "Usuario eliminado correctamente.");
             //cargarTablaUsuarios(); // método para refrescar la tabla
@@ -336,6 +344,8 @@ public class Usuarios extends javax.swing.JPanel {
         }*/
         return control;
     }
+    
+    
 
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
         int fila = jTableUsuarios.getSelectedRow();
@@ -371,11 +381,15 @@ public class Usuarios extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(this, "Usuario actualizado correctamente");
 
         usuario.setTelefono(jTextFieldTelefono.getText());
-        jButtonBuscar.doClick();
+        
+        //jButtonBuscarActionPerformed(evt);
         jButtonUpdate.setEnabled(false);
         jButtonAgregar.setEnabled(true);
         jButtonBuscar.setEnabled(true);
         jButtonEliminar.setEnabled(true);
+        jButtonBuscar.doClick();
+        jButtonLimpiar.doClick();
+        //jButtonLimpiarActionPerformed(evt);
 
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
@@ -391,8 +405,8 @@ public class Usuarios extends javax.swing.JPanel {
 
         // Obtenemos los datos de la fila seleccionada (ajusta las columnas según tu tabla)
         Integer id = (Integer) jTableUsuarios.getValueAt(fila, 0);
-        String nombre = (String) jTableUsuarios.getValueAt(fila, 2);
-        String apellido = (String) jTableUsuarios.getValueAt(fila, 1);
+        String nombre = (String) jTableUsuarios.getValueAt(fila, 1);
+        String apellido = (String) jTableUsuarios.getValueAt(fila, 2);
         String dni = (String) jTableUsuarios.getValueAt(fila, 3);
         String direccion = (String) jTableUsuarios.getValueAt(fila, 4);
         String telefono = (String) jTableUsuarios.getValueAt(fila, 5);
@@ -429,8 +443,10 @@ public class Usuarios extends javax.swing.JPanel {
             });
         }
     }//GEN-LAST:event_jButtonListarTodosActionPerformed
-    
+  
     //-------------------------------------------------------
+    
+
     private void validarEntradaNumerica(java.awt.event.KeyEvent evt, javax.swing.JTextField campo, int maxDigitos) {
         char c = evt.getKeyChar();
 
@@ -496,8 +512,9 @@ public class Usuarios extends javax.swing.JPanel {
             for (Usuario u : lista) {
                 Object[] fila = new Object[]{
                     u.getNumero_socio(),
-                    u.getApellido(),
+                    
                     u.getNombre(),
+                    u.getApellido(),
                     u.getDni(),
                     u.getDireccion(),
                     u.getTelefono(),
@@ -509,6 +526,7 @@ public class Usuarios extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "No se encontraron usuarios con ese apellido.", "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
 
     private void placeHolder() {
         // Placeholder para el campo Nombre

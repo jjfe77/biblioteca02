@@ -103,11 +103,11 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuLibrosMouseClicked
 
     private void jMenuPrestamosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuPrestamosMouseClicked
-        Prestamos prestamol = new Prestamos () ;
-        prestamol. setSize (1024, 745) ;
-        prestamol. setLocation (0, 0);
+        Prestamos prestamo1 = new Prestamos () ;
+        prestamo1. setSize (1024, 745) ;
+        prestamo1. setLocation (0, 0);
         jPanelContent.removeAll () ;
-        jPanelContent.add (prestamol, BorderLayout. CENTER);
+        jPanelContent.add (prestamo1, BorderLayout. CENTER);
         jPanelContent.revalidate () ;
         jPanelContent.repaint();
     }//GEN-LAST:event_jMenuPrestamosMouseClicked

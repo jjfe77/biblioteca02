@@ -1,11 +1,8 @@
-<<<<<<< HEAD
 
-
-=======
->>>>>>> candela-1
 package biblioteca02.Entidades;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +15,7 @@ public class Libro implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id_libro")
     private int id_libro;
     private String isbn;
     private String titulo;
@@ -132,16 +130,12 @@ public class Libro implements Serializable {
 // Metodo toString 
     @Override
     public String toString() {
-<<<<<<< HEAD
+
         return "Libro{" + "id_libro=" + id_libro +  ", isbn=" + isbn +  ", titulo=" + titulo +  
         ", autor=" + autor +  ", genero=" + genero + ", editorial=" + editorial +  ", año=" + año +  '}';
     }
     
  }
-=======
-        return "Libro{" + "id_libro=" + id_libro + ", isbn=" + isbn + ", titulo=" + titulo
-                + ", autor=" + autor + ", genero=" + genero + ", editorial=" + editorial + ", año=" + año + '}';
 
-    }
-}
->>>>>>> candela-1
+
+

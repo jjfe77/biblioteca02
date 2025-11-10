@@ -401,27 +401,37 @@ public class Libros extends javax.swing.JPanel {
     dataLibro.setAdicional(txtEditorial.getText());
     dataLibro.setAño(Integer.parseInt(txtAño.getText()));
 
-    try {
+   
+
+
+
+try {
+    
+    List<Libro> existentes = dao.findByTitulo(txtTitulo.getText());
+
+ 
+    if (!existentes.isEmpty()) {
         
-        Libro existente = dao.findByTitulo(txtTitulo.getText());
+     
+        Libro libroAActualizar = existentes.get(0);
+        
+        
+        dataLibro.setId_libro(libroAActualizar.getId_libro()); 
+        dao.update(dataLibro);
+        
+        JOptionPane.showMessageDialog(this, "Libro actualizado correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
 
-        if (existente != null) {
-            
-            dataLibro.setTitulo(existente.getTitulo()); 
-            dao.update(dataLibro);
-            JOptionPane.showMessageDialog(this, "Libro actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            dao.save(dataLibro);
-            JOptionPane.showMessageDialog(this,  "Libro guardado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        }
-
-    } catch (DaoException ex) {
-        JOptionPane.showMessageDialog(this, 
-            "Error al guardar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, 
-            "El campo 'Año' debe ser numérico.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    } else {
+        
+        dao.save(dataLibro);
+        JOptionPane.showMessageDialog(this, "Libro guardado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
     }
+
+} catch (DaoException ex) {
+    JOptionPane.showMessageDialog(this, "Error al guardar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+} catch (NumberFormatException e) {
+    JOptionPane.showMessageDialog(this, "El campo Año debe ser numrico.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+}
 
   
     }//GEN-LAST:event_btn_GuardarActionPerformed

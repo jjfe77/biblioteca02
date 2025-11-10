@@ -2,6 +2,7 @@ package biblioteca02.DaoImpl;
 
 import biblioteca02.Dao.DaoException;
 import biblioteca02.Entidades.Usuario;
+import java.awt.image.ImageObserver;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -26,6 +27,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
         }
 
     }
+
 
     @Override
     public void update(Usuario data) throws DaoException {
@@ -55,7 +57,17 @@ public class UsuarioDaoImpl implements UsuarioDao {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-
+    /**
+     * Esta función recibe un String y devuelve
+     * una List con todos los usuarios que contienen
+     * esta combinacion en la tabla apellido de la BDD
+     * juanjo_biblioteca alojada en AlwaysData.
+     * @param apellido
+     * @return 
+     * Retorna una lista con todos los usuarios en cuyo
+     * apellido coincide total o parcialmente con
+     * el texto ingresado en el campo Apellido.
+     */
     @Override
     public List<Usuario> buscarPorApellido(String apellido) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
@@ -78,7 +90,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
         return resultados;
     }
     
-    
+/*    
 public Usuario findByApellido(String apellido) throws DaoException {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
     EntityManager em = emf.createEntityManager();
@@ -109,7 +121,7 @@ public Usuario findByApellido(String apellido) throws DaoException {
         emf.close();
     }
 }
-
+*/
     @Override
     public void eliminar(Integer id) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
@@ -131,6 +143,13 @@ public Usuario findByApellido(String apellido) throws DaoException {
         }
     }
 
+    
+    /**
+     * Esta función que busca a todos los usuarios
+     * almacenados en la BDD juanjo_biblioteca
+     * @return 
+     * Retorna una lista con todos los usuarios regitrados
+     */
     public List<Usuario> listar() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
         EntityManager em = emf.createEntityManager();
