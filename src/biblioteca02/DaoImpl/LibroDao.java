@@ -18,7 +18,7 @@ public interface LibroDao {
     // Buscar un libro por su Titulo
     List <Libro> findByTitulo(String titulo) throws DaoException;
     
-    public abstract List<Libro> buscarPorAutor(String a) throws DaoException;
+    public abstract List<Libro> buscarPorAutor(String a, String b) throws DaoException;
 
     
 }

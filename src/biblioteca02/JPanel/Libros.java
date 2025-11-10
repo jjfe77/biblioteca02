@@ -454,13 +454,14 @@ try {
     
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         String autor = txtAutor.getText().trim();
+        String titulo = txtTitulo.getText().trim();
         if (autor.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese un autor para buscar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ingrese un autor y/o Titulo para buscar.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         LibroDaoImpl dao = new LibroDaoImpl();
-        List<Libro> lista = dao.buscarPorAutor(autor);
+        List<Libro> lista = dao.buscarPorAutor(autor, titulo);
 
         DefaultTableModel model = (DefaultTableModel) Tabla_Libros.getModel();
         model.setRowCount(0);
