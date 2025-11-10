@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-  <persistence-unit name="biblioteca02PU" transaction-type="RESOURCE_LOCAL">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>biblioteca02.Entidades.Usuario</class>
-    <class>biblioteca02.Entidades.Libro</class>
-    <class>biblioteca02.Entidades.Prestamo</class>
-    <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://mysql-juanjo.alwaysdata.net:3306/juanjo_biblioteca?serverTimezone=UTC"/>
-      <property name="javax.persistence.jdbc.user" value="juanjo"/>
-      <property name="javax.persistence.jdbc.password" value="Juanjo$%2194"/>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="eclipselink.target-database" value="MySQL"/>
-      <!--<property name="javax.persistence.schema-generation.database.action" value="update"/>
-  -->    
-  <property name="eclipselink.ddl-generation" value="update-tables"/>
-        <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+    <persistence-unit name="biblioteca02PU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>biblioteca02.Entidades.Usuario</class>
+        <class>biblioteca02.Entidades.Libro</class>
+        <class>biblioteca02.Entidades.Prestamo</class>
+        <properties>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://mysql-juanjo.alwaysdata.net:3306/juanjo_biblioteca?serverTimezone=UTC"/>
+            <property name="javax.persistence.jdbc.user" value="juanjo"/>
+            <property name="javax.persistence.jdbc.password" value="Juanjo$%2194"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="eclipselink.target-database" value="MySQL"/>
+            <property name="javax.persistence.schema-generation.database.action" value="create-or-extend-tables"/>
+            <!--<property name="javax.persistence.schema-generation.database.action" value="update"/>    
+            <property name="eclipselink.ddl-generation" value="update-tables"/>
+            <property name="eclipselink.ddl-generation.output-mode" value="database"/>-->
 
-    </properties>
-    <!--
-    <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/biblioteca_simple:3306/juanjo_biblioteca?serverTimezone=UTC"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-      <property name="javax.persistence.jdbc.password" value="root"/>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="javax.persistence.schema-generation.database.action" value="create-or-extend-tables"/>
-      <property name="eclipselink.target-database" value="MySQL"/>
-    </properties>
-    -->
-  </persistence-unit>
+        </properties>
+        <!--
+        <properties>
+          <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/biblioteca_simple:3306/juanjo_biblioteca?serverTimezone=UTC"/>
+          <property name="javax.persistence.jdbc.user" value="root"/>
+          <property name="javax.persistence.jdbc.password" value="root"/>
+          <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+          <property name="javax.persistence.schema-generation.database.action" value="create-or-extend-tables"/>
+          <property name="eclipselink.target-database" value="MySQL"/>
+        </properties>
+        -->
+    </persistence-unit>
 </persistence>
