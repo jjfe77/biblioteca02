@@ -382,7 +382,7 @@ private void agregarPrestamo() {
             "Prestamo actualizado correctamente.\n",
             "Exito",
             JOptionPane.INFORMATION_MESSAGE);
-        
+        jTextField3.setText(jTable3.getValueAt(jTable3.getSelectedRow(), 3).toString());
         //limpiar();
         prestamoSeleccionado = null;
         

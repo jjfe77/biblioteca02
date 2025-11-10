@@ -72,6 +72,57 @@ public class LibroDaoImpl implements LibroDao {
         }
     }
 
+    //-------------------------------------------------------------------------------
+    @Override
+    public void eliminar(String titulo) throws DaoException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            // Buscar libro por título
+            List<Libro> resultados = em.createQuery(
+                    "SELECT l FROM Libro l WHERE l.titulo = :titulo", Libro.class)
+                    .setParameter("titulo", titulo)
+                    .getResultList();
+
+            if (!resultados.isEmpty()) {
+                Libro libro = resultados.get(0); // si hay varios con mismo título, toma el primero
+                em.remove(libro);
+                em.getTransaction().commit();
+
+                JOptionPane.showMessageDialog(
+                        null, "Libro eliminado correctamente:\n" + libro.getTitulo(),
+                        "Eliminación exitosa", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(
+                        null, "No se encontró un libro con el título " + titulo,
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (HeadlessException e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            JOptionPane.showMessageDialog(
+                    null, "Error al eliminar el libro:\n" + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            throw new DaoException("Error al eliminar el libro: " + e.getMessage());
+
+        } finally {
+            if (em.isOpen()) {
+                em.close();
+            }
+            if (emf.isOpen()) {
+                emf.close();
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------------
+    /*
+
     @Override
     public void eliminar(String titulo) throws DaoException {
 
@@ -114,8 +165,7 @@ public class LibroDaoImpl implements LibroDao {
                 emf.close();
             }
         }
-    }
-
+    }*/
     @Override
     public List<Libro> findByTitulo(String titulo) throws DaoException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");

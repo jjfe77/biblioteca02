@@ -331,7 +331,7 @@ public class Libros extends javax.swing.JPanel {
         dataLibro.setTitulo(txtTitulo.getText());
         dataLibro.setAutor(txtAutor.getText());
         dataLibro.setGenero(txtGenero.getText());
-        dataLibro.setAdicional(txtEditorial.getText());
+        dataLibro.setEditorial(txtEditorial.getText());
         dataLibro.setAño(Integer.parseInt(txtAño.getText()));
 
         try {
@@ -389,7 +389,7 @@ public class Libros extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_EliminarActionPerformed
 
 // BTN EDITAR LIBRO 
-    
+    /*
     private void btn_EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EditarActionPerformed
 
         int fila = Tabla_Libros.getSelectedRow();
@@ -417,7 +417,58 @@ public class Libros extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this,"Error al actualizar el libro: " + ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btn_EditarActionPerformed
+*/
+    
+    
+    // BTN EDITAR LIBRO
+   private void btn_EditarActionPerformed(java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btn_EditarActionPerformed
 
+    int fila = Tabla_Libros.getSelectedRow();
+
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Debe seleccionar un libro de la tabla.",
+                "Advertencia",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    try {
+        Libro dataLibro = new Libro();
+        dataLibro.setIsbn(txtISBN.getText());
+        dataLibro.setTitulo(txtTitulo.getText());
+        dataLibro.setAutor(txtAutor.getText());
+        dataLibro.setGenero(txtGenero.getText());
+        dataLibro.setEditorial(txtEditorial.getText());
+        dataLibro.setAño(Integer.parseInt(txtAño.getText()));
+
+        LibroDaoImpl dao = new LibroDaoImpl();
+        dao.update(dataLibro);
+
+        JOptionPane.showMessageDialog(this,
+                "Libro actualizado correctamente.",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
+
+
+        btnBuscarActionPerformed(null);
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "El campo Año debe ser numérico.",
+                "Advertencia",
+                JOptionPane.WARNING_MESSAGE);
+    } catch (DaoException ex) {
+        JOptionPane.showMessageDialog(this,
+                "Error al actualizar el libro: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+} //GEN-LAST:event_btn_EditarActionPerformed
+    
+    
+    
+    
 // BTN AGREGAR LIBRO 
     
     private void btn_AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AgregarActionPerformed
@@ -429,7 +480,7 @@ public class Libros extends javax.swing.JPanel {
         dataLibro.setTitulo(txtTitulo.getText());
         dataLibro.setAutor(txtAutor.getText());
         dataLibro.setGenero(txtGenero.getText());
-        dataLibro.setAdicional(txtEditorial.getText());
+        dataLibro.setEditorial(txtEditorial.getText());
         dataLibro.setAño(Integer.parseInt(txtAño.getText()));
 
         try {

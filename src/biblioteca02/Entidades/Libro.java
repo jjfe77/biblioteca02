@@ -115,8 +115,9 @@ public class Libro implements Serializable {
         return editorial;
     }
 
-    public void setAdicional(String adicional) {
-        this.editorial = adicional;
+    //public void setAdicional(String adicional) {
+    public void setEditorial(String editorial) {
+        this.editorial = editorial;
     }
 
     public int getAño() {
