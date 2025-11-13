@@ -1,0 +1,3 @@
+El proyecto esta configurado para ejecutarse desde c:\biblioteca02\.
+La base de datos se encuentra alojada en AlwaysData.com.
+En UsuariodaoImplem.java los métodos buscarPorApellido(String apellido) y listar() tienen armado java doc.

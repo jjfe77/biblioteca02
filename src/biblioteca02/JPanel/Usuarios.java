@@ -306,7 +306,7 @@ public class Usuarios extends javax.swing.JPanel {
             dao.buscarPorApellido
             */
             //-----------------------------------------
-            
+            dao.lis
             
             
             dao.eliminar(idUsuario);
@@ -532,8 +532,8 @@ public class Usuarios extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "No se encontraron usuarios con ese apellido.", "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
-
+    
+    
     private void placeHolder() {
         // Placeholder para el campo Nombre
         jTextFieldTelefono.setText("Ingrese hasta 15 digitos");
