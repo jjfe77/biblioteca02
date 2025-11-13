@@ -1,6 +1,6 @@
 # Ignorar archivos generados automáticamente por NetBeans
 /build/
-
+/dist/
 /nbproject/private/
 
 /nbproject/Makefile-*.mk
