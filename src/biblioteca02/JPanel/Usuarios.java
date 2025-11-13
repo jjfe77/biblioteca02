@@ -64,6 +64,11 @@ public class Usuarios extends javax.swing.JPanel {
 
         jLabel6.setText("Mail");
 
+        jTextFieldApellido.setToolTipText("Ingrese el apellido");
+
+        jTextFieldNombre.setToolTipText("Ingrese el nombre");
+
+        jTextFieldDNI.setToolTipText("Ingrese el DNI con 10 digitos");
         jTextFieldDNI.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextFieldDNIKeyReleased(evt);
@@ -73,6 +78,9 @@ public class Usuarios extends javax.swing.JPanel {
             }
         });
 
+        jTextFieldDomicilio.setToolTipText("Ingrese el domicilio");
+
+        jTextFieldTelefono.setToolTipText("Ingrese el numero de telefono");
         jTextFieldTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextFieldTelefonoKeyReleased(evt);
@@ -81,6 +89,8 @@ public class Usuarios extends javax.swing.JPanel {
                 jTextFieldTelefonoKeyTyped(evt);
             }
         });
+
+        jTextFieldMail.setToolTipText("Ingrese el mail");
 
         jButtonAgregar.setText("Agregar");
         jButtonAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -268,6 +278,7 @@ public class Usuarios extends javax.swing.JPanel {
             Logger.getLogger(Usuarios.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println(dataUsuario);
+        jButtonBuscar.doClick();
 
     }//GEN-LAST:event_jButtonAgregarActionPerformed
     
@@ -480,11 +491,11 @@ public class Usuarios extends javax.swing.JPanel {
     }
 
     private void jTextFieldTelefonoKeyTyped(java.awt.event.KeyEvent evt) {
-        validarEntradaNumerica(evt, jTextFieldTelefono, 10);
+        validarEntradaNumerica(evt, jTextFieldTelefono, 15);
     }
 
     private void jTextFieldTelefonoKeyReleased(java.awt.event.KeyEvent evt) {
-        validarEntradaNumerica(evt, jTextFieldTelefono, 10);
+        validarEntradaNumerica(evt, jTextFieldTelefono, 15);
     }
 
     //------------------------------------------------------
@@ -525,13 +536,13 @@ public class Usuarios extends javax.swing.JPanel {
 
     private void placeHolder() {
         // Placeholder para el campo Nombre
-        jTextFieldTelefono.setText("Ingrese 10 digitos");
+        jTextFieldTelefono.setText("Ingrese hasta 15 digitos");
         jTextFieldTelefono.setForeground(Color.GRAY);
 
         jTextFieldTelefono.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
-                if (jTextFieldTelefono.getText().equals("Ingrese 10 digitos")) {
+                if (jTextFieldTelefono.getText().equals("Ingrese hasta 15 digitos")) {
                     jTextFieldTelefono.setText("");
                     jTextFieldTelefono.setForeground(Color.BLACK);
                 }
@@ -541,7 +552,7 @@ public class Usuarios extends javax.swing.JPanel {
             public void focusLost(java.awt.event.FocusEvent e) {
                 if (jTextFieldTelefono.getText().isEmpty()) {
                     jTextFieldTelefono.setForeground(Color.GRAY);
-                    jTextFieldTelefono.setText("Ingrese 10 digitos");
+                    jTextFieldTelefono.setText("Ingrese hasta 15 digitos");
                 }
             }
         });

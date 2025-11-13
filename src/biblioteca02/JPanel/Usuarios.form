@@ -186,24 +186,42 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldApellido">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Ingrese el apellido"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldNombre">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Ingrese el nombre"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldDNI">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Ingrese el DNI con 10 digitos"/>
+      </Properties>
       <Events>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldDNIKeyReleased"/>
         <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldDNIKeyTyped"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldDomicilio">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Ingrese el domicilio"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldTelefono">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Ingrese el numero de telefono"/>
+      </Properties>
       <Events>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldTelefonoKeyReleased"/>
         <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldTelefonoKeyTyped"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldMail">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Ingrese el mail"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonAgregar">
       <Properties>
