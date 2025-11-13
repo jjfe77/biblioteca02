@@ -317,13 +317,20 @@ public class Libros extends javax.swing.JPanel {
         txtAño.setText("");
 
         txtISBN.requestFocus();
+        btnBuscar.setEnabled(true); 
+        btn_Agregar.setEnabled(true);
+        btn_Eliminar.setEnabled(true);
 
     }//GEN-LAST:event_btn_LimpiarCamposActionPerformed
 
 // BTN GUARDAR LIBRO 
     
     private void btn_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_GuardarActionPerformed
-
+        
+        btnBuscar.setEnabled(true); 
+        btn_Agregar.setEnabled(true);
+        btn_Eliminar.setEnabled(true);
+        
         LibroDaoImpl dao = new LibroDaoImpl() {};
         Libro dataLibro = new Libro();
 
@@ -345,7 +352,7 @@ public class Libros extends javax.swing.JPanel {
                 dataLibro.setId_libro(libroAActualizar.getId_libro());
                 dao.update(dataLibro);
 
-                JOptionPane.showMessageDialog(this, "Libro actualizado correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                //JOptionPane.showMessageDialog(this, "Libro actualizado correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
 
             } else {
 
@@ -358,6 +365,9 @@ public class Libros extends javax.swing.JPanel {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "El campo Año debe ser numrico.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
+        
+        btnBuscar.doClick();
+        btn_LimpiarCampos.doClick();
 
     }//GEN-LAST:event_btn_GuardarActionPerformed
 
@@ -386,85 +396,55 @@ public class Libros extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Error al eliminar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+        btnBuscar.doClick();
+       
     }//GEN-LAST:event_btn_EliminarActionPerformed
 
-// BTN EDITAR LIBRO 
-    /*
-    private void btn_EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EditarActionPerformed
 
-        int fila = Tabla_Libros.getSelectedRow();
-
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this,"Debe seleccionar un libro de la tabla.","Advertencia",JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        Libro dataLibro = new Libro();
-        dataLibro.setIsbn(txtISBN.getText());
-        dataLibro.setTitulo(txtTitulo.getText());
-        dataLibro.setAutor(txtAutor.getText());
-        dataLibro.setGenero(txtGenero.getText());
-        dataLibro.setAdicional(txtEditorial.getText());
-        dataLibro.setAño(Integer.parseInt(txtAño.getText()));
-
-        try {
-            LibroDaoImpl dao = new LibroDaoImpl() {};
-            dao.update(dataLibro);
-
-            JOptionPane.showMessageDialog(this,"Libro actualizado correctamente.","Éxito",JOptionPane.INFORMATION_MESSAGE);
-
-        } catch (DaoException ex) {
-            JOptionPane.showMessageDialog(this,"Error al actualizar el libro: " + ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btn_EditarActionPerformed
-*/
     
     
     // BTN EDITAR LIBRO
-   private void btn_EditarActionPerformed(java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btn_EditarActionPerformed
-
+   private void btn_EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EditarActionPerformed
+    btnBuscar.setEnabled(false); 
+    btn_Agregar.setEnabled(false);
+    btn_Eliminar.setEnabled(false);
+    
+  
     int fila = Tabla_Libros.getSelectedRow();
-
     if (fila == -1) {
         JOptionPane.showMessageDialog(this,
-                "Debe seleccionar un libro de la tabla.",
+                "Seleccione un libro de la tabla primero.",
                 "Advertencia",
                 JOptionPane.WARNING_MESSAGE);
         return;
     }
 
-    try {
-        Libro dataLibro = new Libro();
-        dataLibro.setIsbn(txtISBN.getText());
-        dataLibro.setTitulo(txtTitulo.getText());
-        dataLibro.setAutor(txtAutor.getText());
-        dataLibro.setGenero(txtGenero.getText());
-        dataLibro.setEditorial(txtEditorial.getText());
-        dataLibro.setAño(Integer.parseInt(txtAño.getText()));
+    
+    String isbn = (String) Tabla_Libros.getValueAt(fila, 0);
+    String titulo = (String) Tabla_Libros.getValueAt(fila, 1);
+    String autor = (String) Tabla_Libros.getValueAt(fila, 2);
+    String genero = (String) Tabla_Libros.getValueAt(fila, 3);
+    String editorial = (String) Tabla_Libros.getValueAt(fila, 4);
+    Integer año = (Integer) Tabla_Libros.getValueAt(fila, 5);
 
-        LibroDaoImpl dao = new LibroDaoImpl();
-        dao.update(dataLibro);
+    
+    txtISBN.setText(isbn);
+    txtTitulo.setText(titulo);
+    txtAutor.setText(autor);
+    txtGenero.setText(genero);
+    txtEditorial.setText(editorial);
+    txtAño.setText(año.toString());
 
-        JOptionPane.showMessageDialog(this,
-                "Libro actualizado correctamente.",
-                "Éxito",
-                JOptionPane.INFORMATION_MESSAGE);
+    
+    btn_Guardar.setEnabled(true);
 
-
-        btnBuscarActionPerformed(null);
-
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this,
-                "El campo Año debe ser numérico.",
-                "Advertencia",
-                JOptionPane.WARNING_MESSAGE);
-    } catch (DaoException ex) {
-        JOptionPane.showMessageDialog(this,
-                "Error al actualizar el libro: " + ex.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-    }
-} //GEN-LAST:event_btn_EditarActionPerformed
+    
+    JOptionPane.showMessageDialog(this,
+            "Edite los datos en los campos y luego presione GUARDAR para actualizar el libro.",
+            "Modo edición activado",
+            JOptionPane.INFORMATION_MESSAGE);
+     
+}//GEN-LAST:event_btn_EditarActionPerformed
     
     
     

@@ -426,6 +426,7 @@ private void agregarPrestamo() {
     }
 private void marcarDevuelto() {
     int fila = jTable3.getSelectedRow();
+    jTextField3.setText((String) jTable3.getValueAt(fila, 3));
     if (fila == -1) {
         JOptionPane.showMessageDialog(this, 
             "Seleccione un prestamo de la tabla para marcarlo como devuelto.",
@@ -507,6 +508,7 @@ private void marcarDevuelto() {
             "Error",
             JOptionPane.ERROR_MESSAGE);
     }
+    jButton9.doClick();
 }
     private void listarTodosPrestamos() {
         try {

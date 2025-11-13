@@ -336,12 +336,7 @@ public class Usuarios extends javax.swing.JPanel {
             control = 1;
 
         }
-        /*else {
-            JOptionPane.showMessageDialog(this,
-                    "Correo válido ✅",
-                    "Validación correcta",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }*/
+        
         return control;
     }
     

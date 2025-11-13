@@ -90,38 +90,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
         return resultados;
     }
     
-/*    
-public Usuario findByApellido(String apellido) throws DaoException {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
-    EntityManager em = emf.createEntityManager();
-    
-    try {
-        List<Usuario> lista = em.createQuery(
-            "SELECT u FROM Usuario u WHERE LOWER(u.apellido) LIKE LOWER(:apellido)",
-            Usuario.class
-        )
-        .setParameter("apellido", "%" + apellido + "%")
-        .getResultList();
 
-        if (lista.isEmpty()) {
-            return null;
-        } else if (lista.size() > 1) {
-            javax.swing.JOptionPane.showMessageDialog(null, 
-                "Se encontraron " + lista.size() + " usuarios con ese apellido. Mostrando el primero.", 
-                "Múltiples resultados", 
-                javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        }
-
-        return lista.get(0);
-
-    } catch (Exception e) {
-        throw new DaoException("Error al buscar usuario: " + e.getMessage());
-    } finally {
-        em.close();
-        emf.close();
-    }
-}
-*/
     @Override
     public void eliminar(Integer id) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca02PU");
